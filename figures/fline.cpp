@@ -2,6 +2,7 @@
 
 fLine::fLine()
 {
+    pen = new QPen;
     startPoint = new QPointF;
     endPoint = new QPointF;
     startPoint = NULL;
@@ -19,5 +20,9 @@ void fLine::addpoint(QPointF *point)
 void fLine::draw(QGraphicsScene *scene)
 {
     QLine *tempLine = new QLine(startPoint->x(),startPoint->y(),endPoint->x(),endPoint->y());
-    scene->addLine(*tempLine);
+    scene->addLine(*tempLine,*pen);
+}
+void fLine::setPen(QPen p)
+{
+    *pen = p;
 }

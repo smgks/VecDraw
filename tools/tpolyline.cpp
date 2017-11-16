@@ -6,6 +6,7 @@
 tPolyline::tPolyline()
 {
     setText("polyline");
+    pen = new QPen;
 }
 
 void tPolyline::draw(QGraphicsScene *scene)
@@ -21,6 +22,7 @@ void tPolyline::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QPointF *point = new QPointF;
         *point = event->scenePos();
         info::figurStack.at(info::figurStack.length()-1)->addpoint(point);
+        info::figurStack.at(info::figurStack.length()-1);
     }
 }
 void tPolyline::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -30,6 +32,7 @@ void tPolyline::mousePressEvent(QGraphicsSceneMouseEvent *event)
         QPointF *point = new QPointF;
         *point = event->buttonDownScenePos(Qt::LeftButton);
         Polyline->addpoint(point);
+        Polyline->setPen(*pen);
         info::figurStack.push_back(Polyline);
     }
 }
@@ -61,4 +64,19 @@ void tPolyline::setbar(TopToolBar *bar){
 
     barWidget->setLayout(mainlay);
     bar->addWidget(barWidget);
+
+    connect(penRvaul,SIGNAL(valueChanged(int)),this,SLOT(setPenR()));
+    connect(penColor,SIGNAL(clicked(bool)),this,SLOT(setPenC()));
+}
+void tPolyline::setPenR()
+{
+    pen->setWidth(penRvaul->value());
+}
+void tPolyline::setPenC()
+{
+    QColor temp = QColorDialog::getColor();
+    if (!temp.isValid() ) {
+    }
+    pen->setColor(temp);
+
 }

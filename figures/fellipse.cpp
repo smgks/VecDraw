@@ -2,6 +2,8 @@
 
 fEllipse::fEllipse()
 {
+    pen = new QPen;
+    brush = new QBrush;
     startPoint = new QPointF;
     endPoint = new QPointF;
     startPoint = NULL;
@@ -25,5 +27,12 @@ void fEllipse::draw(QGraphicsScene *scene)
                     endPoint->y() < startPoint->y() ? startPoint->y() : endPoint->y());
     QPainterPath *tempPath = new QPainterPath;
     tempPath->addEllipse(*rect);
-    scene->addPath(*tempPath);
+    scene->addPath(*tempPath,*pen,*brush);
+}
+
+void fEllipse::setPen(QPen p){
+    *pen = p;
+}
+void fEllipse::setBrush(QBrush b){
+    *brush = b;
 }

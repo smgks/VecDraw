@@ -5,6 +5,7 @@
 
 tLine::tLine()
 {
+    pen = new QPen;
     setText("line");
 }
 void tLine::draw(QGraphicsScene *scene)
@@ -27,6 +28,7 @@ void tLine::mousePressEvent(QGraphicsSceneMouseEvent *event)
         QPointF *point = new QPointF;
         *point = event->scenePos();
         line->addpoint(point);
+        line->setPen(*pen);
         info::figurStack.push_back(line);
     }
 }
@@ -58,4 +60,18 @@ void tLine::setbar(TopToolBar *bar){
 
     barWidget->setLayout(mainlay);
     bar->addWidget(barWidget);
+
+    connect(penRvaul,SIGNAL(valueChanged(int)),this,SLOT(setPenR()));
+    connect(penColor,SIGNAL(clicked(bool)),this,SLOT(setPenC()));
+}
+void tLine::setPenR()
+{
+    pen->setWidth(penRvaul->value());
+}
+void tLine::setPenC()
+{
+    QColor temp = QColorDialog::getColor();
+    if (!temp.isValid() ) {
+    }
+    pen->setColor(temp);
 }

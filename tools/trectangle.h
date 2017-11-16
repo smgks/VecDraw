@@ -31,7 +31,13 @@ private:
     QLabel *anglelb;
     QSpinBox *angleBox;
     //////////////
-    QPen *pen;
+    QPen pen;
+    QBrush brush;
+    int angle;
+public slots:
+    void setPenR();
+    void setPenC();
+    void setBrushC();
 };
 
 #endif // TRECTANGLE_H

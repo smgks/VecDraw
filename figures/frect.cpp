@@ -4,6 +4,9 @@
 #include <QPainter>
 fRect::fRect()
 {
+    pen = new QPen;
+    brush = new QBrush;
+    angle = new int;
     startPoint = new QPointF;
     endPoint = new QPointF;
     startPoint = NULL;
@@ -27,6 +30,18 @@ void fRect::draw(QGraphicsScene *scene)
                     endPoint->x() < startPoint->x() ? startPoint->x() : endPoint->x(),
                     endPoint->y() < startPoint->y() ? startPoint->y() : endPoint->y());//поэтому отрисовка только слева на право
     QPainterPath *tempPath = new QPainterPath;
-    tempPath->addRoundRect(*rect,30);
-    scene->addPath(*tempPath);
+    tempPath->addRoundRect(*rect,*angle);
+    scene->addPath(*tempPath,*pen,*brush);
+}
+void fRect::setPen(QPen p)
+{
+    *pen = p;
+}
+void fRect::setBrush(QBrush b)
+{
+    *brush = b;
+}
+void fRect::setAngle(int a)
+{
+    *angle = a;
 }

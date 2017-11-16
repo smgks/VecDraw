@@ -10,8 +10,8 @@ public:
 
     void addpoint(QPointF *point);
     void draw(QGraphicsScene *scene);
-    void setPen(QPen *pen);
-    void setBrush(QBrush *brush);
+    void setPen(QPen p);
+    void setBrush(QBrush b);
 private:
     QPointF *startPoint,*endPoint;
     QPen *pen;

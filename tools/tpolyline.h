@@ -25,6 +25,9 @@ private:
     QPushButton *penColor;
     //////////////
     QPen *pen;
+public slots:
+    void setPenR();
+    void setPenC();
 };
 
 #endif // TPOLYLINE_H

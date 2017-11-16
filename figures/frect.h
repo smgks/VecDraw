@@ -10,9 +10,9 @@ public:
 
     void addpoint(QPointF *point);
     void draw(QGraphicsScene *scene);
-    void setPen(QPen *pen);
-    void setBrush(QBrush *brush);
-    void setAngle(int *a);
+    void setPen(QPen p);
+    void setBrush(QBrush b);
+    void setAngle(int a);
 private:
     QPointF *startPoint,*endPoint;
     QPen *pen;

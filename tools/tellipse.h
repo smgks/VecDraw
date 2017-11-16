@@ -31,5 +31,10 @@ private:
     QLabel *brushSl;
     //////////////
     QPen *pen;
+    QBrush *brush;
+public slots:
+    void setPenR();
+    void setPenC();
+    void setBrushC();
 };
 #endif // TELLIPSE_H

@@ -19,7 +19,6 @@ void MainScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     ReDraw();
 }
 void MainScene::ReDraw(){
-    addRect(this->sceneRect(),QPen(Qt::white),QBrush(Qt::white));
     for (int i = 0; i < info::figurStack.length(); ++i) {
         info::figurStack.at(i)->draw(this);
     }

@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::setMainScale(){
+    PaintZone->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     PaintZone->scale(1/info::globalScale->getLX(),1/info::globalScale->getLY());
     PaintZone->scale(info::globalScale->getScaleX(),info::globalScale->getScaleY());
 }
