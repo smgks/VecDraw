@@ -53,8 +53,6 @@ void MainWindow::setMainScale(){
 void MainWindow::setFixedSceneSize(int h,int w)
 {
     PaintZone->setSceneRect(0,0,w,h);
-    PaintZone->setFixedSize(w+16,h+16);
-
 }
 void MainWindow::clearScene(QAction *act)
 {
