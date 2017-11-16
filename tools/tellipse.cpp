@@ -69,12 +69,26 @@ void tEllipse::setbar(TopToolBar *bar){
     mainlay->addLayout(layPenB);
 
     layBrushS = new QVBoxLayout;
+    brushSl = new QLabel;
+    brushSl->setText("Brush Style");
+    combobox = new QComboBox;
+    combobox->addItem("NoBrush");combobox->addItem("SolidPattern");combobox->addItem("Dense1Pattern");combobox->addItem("Dense2Pattern");combobox->addItem("Dense3Pattern");combobox->addItem("Dense4Pattern");combobox->addItem(
+                 "Dense5Pattern");combobox->addItem("Dense6Pattern");combobox->addItem("Dense7Pattern");combobox->addItem(
+                 "HorPattern");combobox->addItem("VerPattern");combobox->addItem("CrossPattern");combobox->addItem(
+                 "BDiagPattern");combobox->addItem("FDiagPattern");combobox->addItem("DiagCrossPattern");combobox->addItem(
+                 "LinearGradientPattern");combobox->addItem("ConicalGradientPattern");combobox->addItem("RadialGradientPattern");
+    layBrushS->addWidget(brushSl);
+    layBrushS->addWidget(combobox);
+    mainlay->addLayout(layBrushS);
+
     barWidget->setLayout(mainlay);
+
     bar->addWidget(barWidget);
 
     connect(penRvaul,SIGNAL(valueChanged(int)),this,SLOT(setPenR()));
     connect(penColor,SIGNAL(clicked(bool)),this,SLOT(setPenC()));
     connect(brushColor,SIGNAL(clicked(bool)),this,SLOT(setBrushC()));
+    connect(combobox,SIGNAL(currentIndexChanged(int)),this,SLOT(setBrushstyle(int)));
 }
 void tEllipse::setPenR()
 {
@@ -94,5 +108,8 @@ void tEllipse::setBrushC()
     if (!temp.isValid() ) {
     }
     brush->setColor(temp);
-    brush->setStyle(Qt::SolidPattern);
+}
+void tEllipse::setBrushstyle(int a)
+{
+    brush->setStyle(Qt::BrushStyle(a));
 }

@@ -3,7 +3,6 @@
 
 #include "abstracttool.h"
 #include "figures/fellipse.h"
-
 class tEllipse : public abstractTool
 {
 public:
@@ -29,10 +28,13 @@ private:
     QPushButton *brushColor;
     QVBoxLayout *layBrushS;
     QLabel *brushSl;
+    QComboBox *combobox;
     //////////////
     QPen *pen;
     QBrush *brush;
+
 public slots:
+    void setBrushstyle(int a);
     void setPenR();
     void setPenC();
     void setBrushC();

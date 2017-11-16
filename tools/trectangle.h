@@ -30,11 +30,13 @@ private:
     QVBoxLayout *anglelay;
     QLabel *anglelb;
     QSpinBox *angleBox;
+    QComboBox *combobox;
     //////////////
     QPen pen;
     QBrush brush;
     int angle;
 public slots:
+    void setBrushstyle(int a);
     void setPenR();
     void setPenC();
     void setBrushC();

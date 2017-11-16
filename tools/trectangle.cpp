@@ -76,6 +76,18 @@ void tRectangle::setbar(TopToolBar *bar){
     angleBox->setMaximum(100);
     anglelay->addWidget(anglelb);
     anglelay->addWidget(angleBox);
+    brushSl = new QLabel;
+    brushSl->setText("Brush Style");
+    layBrushS = new QVBoxLayout;
+    combobox = new QComboBox;
+    combobox->addItem("NoBrush");combobox->addItem("SolidPattern");combobox->addItem("Dense1Pattern");combobox->addItem("Dense2Pattern");combobox->addItem("Dense3Pattern");combobox->addItem("Dense4Pattern");combobox->addItem(
+                 "Dense5Pattern");combobox->addItem("Dense6Pattern");combobox->addItem("Dense7Pattern");combobox->addItem(
+                 "HorPattern");combobox->addItem("VerPattern");combobox->addItem("CrossPattern");combobox->addItem(
+                 "BDiagPattern");combobox->addItem("FDiagPattern");combobox->addItem("DiagCrossPattern");combobox->addItem(
+                 "LinearGradientPattern");combobox->addItem("ConicalGradientPattern");combobox->addItem("RadialGradientPattern");
+    layBrushS->addWidget(brushSl);
+    layBrushS->addWidget(combobox);
+    mainlay->addLayout(layBrushS);
     mainlay->addLayout(anglelay);
 
     layBrushS = new QVBoxLayout;
@@ -86,6 +98,7 @@ void tRectangle::setbar(TopToolBar *bar){
     connect(penColor,SIGNAL(clicked(bool)),this,SLOT(setPenC()));
     connect(brushColor,SIGNAL(clicked(bool)),this,SLOT(setBrushC()));
     connect(angleBox,SIGNAL(valueChanged(int)),this,SLOT(setPenR()));
+    connect(combobox,SIGNAL(currentIndexChanged(int)),this,SLOT(setBrushstyle(int)));
 }
 void tRectangle::setPenR()
 {
@@ -106,6 +119,9 @@ void tRectangle::setBrushC()
     if (!temp.isValid() ) {
     }
     brush.setColor(temp);
-    brush.setStyle(Qt::SolidPattern);
 }
 
+void tRectangle::setBrushstyle(int a)
+{
+    brush.setStyle(Qt::BrushStyle(a));
+}
