@@ -8,11 +8,11 @@ QVector<abstractFigure*> info::figurStack;
 LeftToolBar::LeftToolBar(QToolBar *Bar)
 {
     TopBar = Bar;
-    btn = new tPolyline;
-    btn1 = new tRectangle;
-    btn2 = new tEllipse;
-    btn3 = new tLine;
-    btn4 = new tMagnifier(scalebox);
+    Polyline = new tPolyline;
+    Rectangle = new tRectangle;
+    Ellipse = new tEllipse;
+    Line = new tLine;
+    Magnifier = new tMagnifier(scalebox);
     scalebox = new QSpinBox;
 
     scalebox->setMinimum(1);
@@ -23,55 +23,56 @@ LeftToolBar::LeftToolBar(QToolBar *Bar)
     setMovable(1);
     setMinimumSize(50,50);
     addWidget(scalebox);
-    addWidget(btn);
-    addWidget(btn1);
-    addWidget(btn2);
-    addWidget(btn3);
-    addWidget(btn4);
+    addWidget(Polyline);
+    addWidget(Rectangle);
+    addWidget(Ellipse);
+    addWidget(Line);
+    addWidget(Magnifier);
     TopBar->hide();
     ////////
     connect(scalebox,SIGNAL(valueChanged(int)),this,SLOT(scaleChanged()));
-    connect(btn,SIGNAL(clicked()),this,SLOT(btnClick()));
-    connect(btn1,SIGNAL(clicked()),this,SLOT(btn1Click()));
-    connect(btn2,SIGNAL(clicked(bool)),this,SLOT(btn2Click()));
-    connect(btn3,SIGNAL(clicked(bool)),this,SLOT(btn3Click()));
-    connect(btn4,SIGNAL(clicked(bool)),this,SLOT(btn4Click()));
+    connect(Polyline,SIGNAL(clicked()),this,SLOT(PolylineClick()));
+    connect(Rectangle,SIGNAL(clicked()),this,SLOT(RectangleClick()));
+    connect(Ellipse,SIGNAL(clicked(bool)),this,SLOT(EllipseClick()));
+    connect(Line,SIGNAL(clicked(bool)),this,SLOT(LineClick()));
+    connect(Magnifier,SIGNAL(clicked(bool)),this,SLOT(MagnifierClick()));
     ////////
 
-    emit btn->click();
+    emit Polyline->click();
 }
 void LeftToolBar::setScaleBox(){
     scalebox->setValue(info::globalScale->getScaleX());
 }
 
-void LeftToolBar::btnClick(){
+void LeftToolBar::PolylineClick(){
     TopBar->clear();
     TopBar->show();
     info::tool = new tPolyline;
-    btn->setFocus();
+    Polyline->setFocus();
+
 }
-void LeftToolBar::btn1Click(){
+void LeftToolBar::RectangleClick(){
     TopBar->clear();
     TopBar->show();
     info::tool = new tRectangle;
-    btn1->setFocus();
+    Rectangle->setFocus();
 }
-void LeftToolBar::btn2Click(){
+void LeftToolBar::EllipseClick(){
     TopBar->clear();
     TopBar->show();
     info::tool = new tEllipse;
 }
-void LeftToolBar::btn3Click(){
+void LeftToolBar::LineClick(){
     TopBar->clear();
     TopBar->show();
     info::tool = new tLine;
-    btn3->setFocus();
+    Line->setFocus();
 }
-void LeftToolBar::btn4Click(){
+void LeftToolBar::MagnifierClick(){
     TopBar->clear();
     TopBar->hide();
     info::tool = new tMagnifier(scalebox);
-    btn4->setFocus();
+    Magnifier->setFocus();
 }
 void LeftToolBar::scaleChanged(){
     info::globalScale->setScale(qreal(scalebox->value()),qreal(scalebox->value()));

@@ -19,19 +19,19 @@ public:
 signals:
     void changeScale();
 private:
-    tPolyline *btn;
-    tRectangle *btn1;
-    tEllipse *btn2;
-    tLine *btn3;
-    tMagnifier *btn4;
+    tPolyline *Polyline;
+    tRectangle *Rectangle;
+    tEllipse *Ellipse;
+    tLine *Line;
+    tMagnifier *Magnifier;
     QToolBar *TopBar;  
     QSpinBox *scalebox;
 private slots:
-    void btnClick();
-    void btn1Click();
-    void btn2Click();
-    void btn3Click();
-    void btn4Click();
+    void PolylineClick();
+    void RectangleClick();
+    void EllipseClick();
+    void LineClick();
+    void MagnifierClick();
     void scaleChanged();
     void setScaleBox();
 };
