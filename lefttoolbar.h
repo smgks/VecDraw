@@ -15,7 +15,7 @@ class LeftToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit LeftToolBar(QToolBar *Bar);
+    explicit LeftToolBar(TopToolBar *Bar);
 signals:
     void changeScale();
 private:
@@ -24,8 +24,9 @@ private:
     tEllipse *Ellipse;
     tLine *Line;
     tMagnifier *Magnifier;
-    QToolBar *TopBar;  
+    TopToolBar *TopBar;
     QSpinBox *scalebox;
+    void dropStyle();
 private slots:
     void PolylineClick();
     void RectangleClick();

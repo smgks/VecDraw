@@ -5,8 +5,9 @@
 abstractTool *info::tool;
 QVector<abstractFigure*> info::figurStack;
 
-LeftToolBar::LeftToolBar(QToolBar *Bar)
+LeftToolBar::LeftToolBar(TopToolBar *Bar)
 {
+    setStyleSheet("background-color: grey");
     TopBar = Bar;
     Polyline = new tPolyline;
     Rectangle = new tRectangle;
@@ -48,31 +49,49 @@ void LeftToolBar::PolylineClick(){
     TopBar->clear();
     TopBar->show();
     info::tool = new tPolyline;
-    Polyline->setFocus();
-
+    dropStyle();
+    Polyline->setStyleSheet("background-color: yellow");
+    info::tool->setbar(TopBar);
 }
 void LeftToolBar::RectangleClick(){
     TopBar->clear();
     TopBar->show();
     info::tool = new tRectangle;
-    Rectangle->setFocus();
+    dropStyle();
+    Rectangle->setStyleSheet("background-color: yellow");
+    info::tool->setbar(TopBar);
 }
 void LeftToolBar::EllipseClick(){
     TopBar->clear();
     TopBar->show();
     info::tool = new tEllipse;
+    dropStyle();
+    Ellipse->setStyleSheet("background-color: yellow");
+    info::tool->setbar(TopBar);
 }
 void LeftToolBar::LineClick(){
     TopBar->clear();
     TopBar->show();
     info::tool = new tLine;
-    Line->setFocus();
+    dropStyle();
+    Line->setStyleSheet("background-color: yellow");
+    info::tool->setbar(TopBar);
 }
 void LeftToolBar::MagnifierClick(){
     TopBar->clear();
     TopBar->hide();
     info::tool = new tMagnifier(scalebox);
-    Magnifier->setFocus();
+    dropStyle();
+    Magnifier->setStyleSheet("background-color: yellow");
+    info::tool->setbar(TopBar);
+}
+void LeftToolBar::dropStyle(){
+    Magnifier->setStyleSheet("background-color: silver");
+    Line->setStyleSheet("background-color: silver");
+    Ellipse->setStyleSheet("background-color: silver");
+    Rectangle->setStyleSheet("background-color: silver");
+    Polyline->setStyleSheet("background-color: silver");
+    Polyline->setStyleSheet("background-color: silver");
 }
 void LeftToolBar::scaleChanged(){
     info::globalScale->setScale(qreal(scalebox->value()),qreal(scalebox->value()));

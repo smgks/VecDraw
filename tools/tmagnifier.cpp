@@ -27,3 +27,6 @@ void tMagnifier::mousePressEvent(QGraphicsSceneMouseEvent *event)
         ScaleSpin->setValue(ScaleSpin->value()/2);
     }
 }
+void tMagnifier::setbar(TopToolBar *bar){
+    //PASS
+}

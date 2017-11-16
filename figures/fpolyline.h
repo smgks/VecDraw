@@ -12,8 +12,10 @@ public:
 
     void addpoint(QPointF *point);
     void draw(QGraphicsScene *scene);
+    void setPen(QPen *pen);
 private:
     QVector<QPointF> points;
+    QPen *pen;
 };
 
 #endif // FPOLYLINE_H

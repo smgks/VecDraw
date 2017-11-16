@@ -2,7 +2,6 @@
 #define TMAGNIFIER_H
 
 #include "abstracttool.h"
-#include <QSpinBox>
 
 class tMagnifier : public abstractTool
 {
@@ -12,6 +11,7 @@ public:
     void draw(QGraphicsScene *scene);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void setbar(TopToolBar *bar);
 private:
     QSpinBox *ScaleSpin;
 };

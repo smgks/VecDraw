@@ -10,8 +10,28 @@ public:
     void draw(QGraphicsScene *scene);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void setbar(TopToolBar *bar);
 private:
     fRect *rect;
+    QWidget *barWidget;
+
+    QHBoxLayout *mainlay;
+    QVBoxLayout *layPenR;
+    QLabel *penRl;
+    QSpinBox *penRvaul;
+    QVBoxLayout *layPenC;
+    QLabel *penCl;
+    QPushButton *penColor;
+    QVBoxLayout *layPenB;
+    QLabel *brushCl;
+    QPushButton *brushColor;
+    QVBoxLayout *layBrushS;
+    QLabel *brushSl;
+    QVBoxLayout *anglelay;
+    QLabel *anglelb;
+    QSpinBox *angleBox;
+    //////////////
+    QPen *pen;
 };
 
 #endif // TRECTANGLE_H

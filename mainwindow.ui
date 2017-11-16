@@ -14,14 +14,26 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>400</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menufile">
+    <property name="title">
+     <string>file</string>
+    </property>
+    <addaction name="actionset_fixed_size"/>
+   </widget>
+   <addaction name="menufile"/>
+  </widget>
   <action name="actionset_fixed_size">
    <property name="text">
     <string>set fixed size</string>
-   </property>
-  </action>
-  <action name="actionclear">
-   <property name="text">
-    <string>clear</string>
    </property>
   </action>
  </widget>

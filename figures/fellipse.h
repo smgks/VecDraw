@@ -10,8 +10,12 @@ public:
 
     void addpoint(QPointF *point);
     void draw(QGraphicsScene *scene);
+    void setPen(QPen *pen);
+    void setBrush(QBrush *brush);
 private:
     QPointF *startPoint,*endPoint;
+    QPen *pen;
+    QBrush *brush;
 };
 
 #endif // FELLIPSE_H

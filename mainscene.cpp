@@ -8,17 +8,18 @@
 MainScene::MainScene(QObject *parent) :
     QGraphicsScene(parent)
 {
+    ReDraw();
 }
 
 void MainScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-        info::tool->mouseMoveEvent(event);
-        update();
-        clear();
-        addRect(0,0,0,0);
-        ReDraw();
+    info::tool->mouseMoveEvent(event);
+    update();
+    clear();
+    ReDraw();
 }
 void MainScene::ReDraw(){
+    addRect(this->sceneRect(),QPen(Qt::white),QBrush(Qt::white));
     for (int i = 0; i < info::figurStack.length(); ++i) {
         info::figurStack.at(i)->draw(this);
     }

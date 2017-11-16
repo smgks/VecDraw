@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     info::globalScale->setScale(99,99);
     ui->setupUi(this);
     mainMenuBar = new QMenuBar;
+    mainMenuBar->setStyleSheet("background-color: gold");
     MainForm = new  QHBoxLayout;
     TopBar = new TopToolBar;
     addToolBar(Qt::TopToolBarArea,TopBar);
@@ -25,12 +26,14 @@ MainWindow::MainWindow(QWidget *parent) :
     PaintZone->setScene(scene);
     PaintZone->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     PaintZone->scale(info::globalScale->getScaleX(),info::globalScale->getScaleY());
+    PaintZone->setStyleSheet("border-color: silver");
     ui->centralWidget->setLayout(MainForm);
     MainForm->addWidget(LeftlBar);
     addToolBar(Qt::LeftToolBarArea,LeftlBar);
     MainForm->addWidget(PaintZone);
     setMenuBar(mainMenuBar);
     filemenu = new QMenu;
+    filemenu->setStyleSheet("background-color: silver");
     filemenu->setTitle("File");
     mainMenuBar->addMenu(filemenu);
         filemenu->addAction("Clear");

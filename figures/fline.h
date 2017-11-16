@@ -10,8 +10,10 @@ public:
 
     void addpoint(QPointF *point);
     void draw(QGraphicsScene *scene);
+    void setPen(QPen *pen);
 private:
     QPointF *startPoint,*endPoint;
+    QPen *pen;
 };
 
 #endif // FLINE_H
