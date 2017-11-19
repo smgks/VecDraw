@@ -6,10 +6,10 @@ fRect::fRect()
 {
     pen = new QPen;
     brush = new QBrush;
-    angle = new int;
+    angle = 1;
     startPoint = new QPointF;
-    endPoint = new QPointF;
     startPoint = NULL;
+    endPoint = new QPointF;
     endPoint = NULL;
 }
 
@@ -23,15 +23,14 @@ void fRect::addpoint(QPointF *point)
 }
 void fRect::draw(QGraphicsScene *scene)
 {
-
     QRectF *rect = new QRectF;
     rect->setCoords(startPoint->x() > endPoint->x() ? endPoint->x() : startPoint->x(),//тут возникни проблемы с отрисовкой квадрата
                     startPoint->y() > endPoint->y() ? endPoint->y() : startPoint->y(),//справа на лево , углы не округлялись
                     endPoint->x() < startPoint->x() ? startPoint->x() : endPoint->x(),
                     endPoint->y() < startPoint->y() ? startPoint->y() : endPoint->y());//поэтому отрисовка только слева на право
     QPainterPath *tempPath = new QPainterPath;
-    tempPath->addRoundRect(*rect,*angle);
-    scene->addPath(*tempPath,*pen,*brush);
+    tempPath->addRoundRect(*rect,angle);
+    scene->addPolygon(tempPath->toFillPolygon(),*pen,*brush);
 }
 void fRect::setPen(QPen p)
 {
@@ -43,5 +42,5 @@ void fRect::setBrush(QBrush b)
 }
 void fRect::setAngle(int a)
 {
-    *angle = a;
+    angle = a;
 }

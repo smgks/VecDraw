@@ -17,7 +17,7 @@ private:
     QPointF *startPoint,*endPoint;
     QPen *pen;
     QBrush *brush;
-    int *angle;
+    int angle;
 };
 
 #endif // FRECT_H

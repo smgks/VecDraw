@@ -8,7 +8,7 @@ tRectangle::tRectangle()
 }
 void tRectangle::draw(QGraphicsScene *scene)
 {
-    angle = 0;
+    angle = 1;
     rect->draw(scene);
 }
 
@@ -26,10 +26,11 @@ void tRectangle::mousePressEvent(QGraphicsSceneMouseEvent *event)
         rect = new fRect;
         QPointF *point = new QPointF;
         *point = event->scenePos();
-        rect->setAngle(angle);
+        setPenR();
         rect->setBrush(brush);
         rect->setPen(pen);
         rect->addpoint(point);
+        rect->setAngle(angle);
         info::figurStack.push_back(rect);
     }
 }
@@ -71,8 +72,8 @@ void tRectangle::setbar(TopToolBar *bar){
     anglelb = new QLabel;
     anglelb->setText("rect angle radius");
     angleBox = new QSpinBox;
-    angleBox->setMinimum(0);
-    angleBox->setValue(0);
+    angleBox->setMinimum(1);
+    angleBox->setValue(1);
     angleBox->setMaximum(100);
     anglelay->addWidget(anglelb);
     anglelay->addWidget(angleBox);
