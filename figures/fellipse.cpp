@@ -1,38 +1,53 @@
-#include "fellipse.h"
+﻿#include "fellipse.h"
 
-fEllipse::fEllipse()
+fEllipse::fEllipse(QObject *parent) : QObject(parent), abstractfigure()
 {
-    pen = new QPen;
-    brush = new QBrush;
-    startPoint = new QPointF;
-    endPoint = new QPointF;
     startPoint = NULL;
     endPoint = NULL;
 }
 
-void fEllipse::addpoint(QPointF *point)
-{   if (!startPoint){
-        startPoint = point;
-        endPoint = point;
-    }else{
-        endPoint = point;
-    }
-}
-void fEllipse::draw(QGraphicsScene *scene)
+QRectF fEllipse::boundingRect() const
 {
-    QRectF *rect = new QRectF;
-    rect->setCoords(startPoint->x() > endPoint->x() ? endPoint->x() : startPoint->x(),
-                    startPoint->y() > endPoint->y() ? endPoint->y() : startPoint->y(),
-                    endPoint->x() < startPoint->x() ? startPoint->x() : endPoint->x(),
-                    endPoint->y() < startPoint->y() ? startPoint->y() : endPoint->y());
-    QPainterPath *tempPath = new QPainterPath;
-    tempPath->addEllipse(*rect);
-    scene->addPath(*tempPath,*pen,*brush);
+    return QRectF(0,0,endPoint->x()-startPoint->x(),endPoint->y()-startPoint->y());
 }
 
-void fEllipse::setPen(QPen p){
-    *pen = p;
+void fEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->setPen(pen);
+    painter->setBrush(brush);
+    painter->drawEllipse(0,0,endPoint->x()-startPoint->x(),endPoint->y()-startPoint->y());
+    if(isSelected()){
+        QPen temppen;
+        temppen.setColor(Qt::green);
+        painter->setPen(temppen);
+        painter->drawEllipse(QPointF(endPoint->x()-startPoint->x(),endPoint->y()-startPoint->y()),5,5);
+        painter->drawEllipse(QPointF(0,0),5,5);
+        temppen.setColor(Qt::red);
+        painter->setPen(temppen);
+        painter->drawEllipse(QPointF(endPoint->x()-startPoint->x(),endPoint->y()-startPoint->y()),3,3);
+        painter->drawEllipse(QPointF(0,0),3,3);
+    }
 }
-void fEllipse::setBrush(QBrush b){
-    *brush = b;
+
+void fEllipse::setPen(QPen p)
+{
+    pen = p;
+}
+void fEllipse::setBrush(QBrush b)
+{
+    brush = b;
+}
+
+void fEllipse::setSelection(int s)
+{
+}
+
+void fEllipse::addPoint(QPointF *point)
+{
+    if (!startPoint){
+            startPoint = point;
+            endPoint = point;
+        }else{
+            endPoint = point;
+    }
 }

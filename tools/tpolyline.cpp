@@ -7,33 +7,35 @@ tPolyline::tPolyline()
 {
     setText("polyline");
     pen = new QPen;
+    Polyline = NULL;
 }
 
 void tPolyline::draw(QGraphicsScene *scene)
 {
-    Polyline->draw(scene);
-
+    if (Polyline){
+        scene->removeItem(Polyline);
+        scene->addItem(Polyline);
+    }
 }
 
 void tPolyline::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 
     if (event->buttons() == Qt::LeftButton){
-        QPointF *point = new QPointF;
-        *point = event->scenePos();
-        info::figurStack.at(info::figurStack.length()-1)->addpoint(point);
-        info::figurStack.at(info::figurStack.length()-1);
+        QPointF *temppoint = new QPointF;
+        *temppoint = event->scenePos();
+        Polyline->addPoint(temppoint);
     }
 }
 void tPolyline::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
-        Polyline = new fPolyline;
-        QPointF *point = new QPointF;
-        *point = event->buttonDownScenePos(Qt::LeftButton);
-        Polyline->addpoint(point);
+        Polyline= new fPolyline;
         Polyline->setPen(*pen);
-        info::figurStack.push_back(Polyline);
+        QPointF *temppoint = new QPointF;
+        *temppoint = event->scenePos();
+        Polyline->addPoint(temppoint);
+        Polyline->setPos(*temppoint);
     }
 }
 void tPolyline::setbar(TopToolBar *bar){

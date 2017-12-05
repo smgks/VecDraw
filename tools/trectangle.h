@@ -32,8 +32,8 @@ private:
     QSpinBox *angleBox;
     QComboBox *combobox;
     //////////////
-    QPen pen;
-    QBrush brush;
+    QPen *pen;
+    QBrush *brush;
     int angle;
 public slots:
     void setBrushstyle(int a);

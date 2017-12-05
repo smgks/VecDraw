@@ -2,14 +2,12 @@
 #define SCENEINFO_H
 
 #include "tools/abstracttool.h"
-#include "figures/abstractfigure.h"
+//#include "figures/abstractfigure.h"
 #include <QObject>
 
 namespace info {
     class gScale
     {
-    signals:
-        void changeScale();
     public:
         explicit gScale(){
 
@@ -40,6 +38,5 @@ namespace info {
     };
     extern abstractTool *tool;
     extern gScale *globalScale;
-    extern QVector<abstractFigure*> figurStack;
 }
 #endif // SCENEINFO_H

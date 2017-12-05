@@ -6,30 +6,34 @@
 tLine::tLine()
 {
     pen = new QPen;
+    line = NULL;
     setText("line");
 }
 void tLine::draw(QGraphicsScene *scene)
 {
-    line->draw(scene);
+    if (line){
+        scene->removeItem(line);
+        scene->addItem(line);
+    }
 }
 
 void tLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
-        QPointF *point = new QPointF;
-        *point = event->scenePos();
-        info::figurStack.at(info::figurStack.length()-1)->addpoint(point);
+        QPointF *temppoint = new QPointF;
+        *temppoint = event->scenePos();
+        line->addPoint(temppoint);
     }
 }
 void tLine::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
         line = new fLine;
-        QPointF *point = new QPointF;
-        *point = event->scenePos();
-        line->addpoint(point);
         line->setPen(*pen);
-        info::figurStack.push_back(line);
+        QPointF *temppoint = new QPointF;
+        *temppoint = event->scenePos();
+        line->setPos(*temppoint);
+        line->addPoint(temppoint);
     }
 }
 void tLine::setbar(TopToolBar *bar){

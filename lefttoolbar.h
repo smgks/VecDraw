@@ -10,6 +10,7 @@
 #include "tools/tellipse.h"
 #include "tools/tline.h"
 #include "tools/tmagnifier.h"
+#include "tools/tselection.h"
 
 class LeftToolBar : public QToolBar
 {
@@ -24,6 +25,8 @@ private:
     tEllipse *Ellipse;
     tLine *Line;
     tMagnifier *Magnifier;
+    tSelection *Selection;
+
     TopToolBar *TopBar;
     QSpinBox *scalebox;
     void dropStyle();
@@ -33,6 +36,7 @@ private slots:
     void EllipseClick();
     void LineClick();
     void MagnifierClick();
+    void SelectionClick();
     void scaleChanged();
     void setScaleBox();
 };

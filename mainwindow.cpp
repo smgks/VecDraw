@@ -8,6 +8,7 @@
 #include "fixedsize.h"
 
 info::gScale *(info::globalScale) = new info::gScale;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -36,8 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
     filemenu->setStyleSheet("background-color: silver");
     filemenu->setTitle("File");
     mainMenuBar->addMenu(filemenu);
-        filemenu->addAction("Clear");
-        filemenu->addAction("Set fixed size");
+    filemenu->addAction("Clear");
+    filemenu->addAction("Set fixed size");
 
     connect(LeftlBar,SIGNAL(changeScale()),this,SLOT(setMainScale()));
 
@@ -57,10 +58,7 @@ void MainWindow::setFixedSceneSize(int h,int w)
 void MainWindow::clearScene(QAction *act)
 {
     if ((act->text()) == "Clear"){
-        PaintZone->scene()->clear();
-        while (info::figurStack.length() != 0){
-            info::figurStack.pop_back();
-        }
+        scene->clear();
     }
     if ((act->text()) == "Set fixed size"){
         FixedSize *tempDialog = new FixedSize;

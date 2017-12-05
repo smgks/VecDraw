@@ -7,31 +7,35 @@ tEllipse::tEllipse()
 {
     pen = new QPen;
     brush = new QBrush;
+    ellipse = NULL;
     setText("ellipse");
 }
 void tEllipse::draw(QGraphicsScene *scene)
 {
-    ellipse->draw(scene);
+    if (ellipse){
+        scene->removeItem(ellipse);
+        scene->addItem(ellipse);
+    }
 }
 
 void tEllipse::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
-        QPointF *point = new QPointF;
-        *point = event->scenePos();
-        info::figurStack.at(info::figurStack.length()-1)->addpoint(point);
+        QPointF *temppoint = new QPointF;
+        *temppoint = event->scenePos();
+        ellipse->addPoint(temppoint);
     }
 }
 void tEllipse::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
         ellipse = new fEllipse;
-        QPointF *point = new QPointF;
-        *point = event->scenePos();
-        ellipse->addpoint(point);
         ellipse->setPen(*pen);
         ellipse->setBrush(*brush);
-        info::figurStack.push_back(ellipse);
+        QPointF *temppoint = new QPointF;
+        *temppoint = event->scenePos();
+        ellipse->setPos(*temppoint);
+        ellipse->addPoint(temppoint);
     }
 }
 void tEllipse::setbar(TopToolBar *bar){
@@ -72,11 +76,24 @@ void tEllipse::setbar(TopToolBar *bar){
     brushSl = new QLabel;
     brushSl->setText("Brush Style");
     combobox = new QComboBox;
-    combobox->addItem("NoBrush");combobox->addItem("SolidPattern");combobox->addItem("Dense1Pattern");combobox->addItem("Dense2Pattern");combobox->addItem("Dense3Pattern");combobox->addItem("Dense4Pattern");combobox->addItem(
-                 "Dense5Pattern");combobox->addItem("Dense6Pattern");combobox->addItem("Dense7Pattern");combobox->addItem(
-                 "HorPattern");combobox->addItem("VerPattern");combobox->addItem("CrossPattern");combobox->addItem(
-                 "BDiagPattern");combobox->addItem("FDiagPattern");combobox->addItem("DiagCrossPattern");combobox->addItem(
-                 "LinearGradientPattern");combobox->addItem("ConicalGradientPattern");combobox->addItem("RadialGradientPattern");
+    combobox->addItem("NoBrush");
+    combobox->addItem("SolidPattern");
+    combobox->addItem("Dense1Pattern");
+    combobox->addItem("Dense2Pattern");
+    combobox->addItem("Dense3Pattern");
+    combobox->addItem("Dense4Pattern");
+    combobox->addItem("Dense5Pattern");
+    combobox->addItem("Dense6Pattern");
+    combobox->addItem("Dense7Pattern");
+    combobox->addItem("HorPattern");
+    combobox->addItem("VerPattern");
+    combobox->addItem("CrossPattern");
+    combobox->addItem("BDiagPattern");
+    combobox->addItem("FDiagPattern");
+    combobox->addItem("DiagCrossPattern");
+    combobox->addItem("LinearGradientPattern");
+    combobox->addItem("ConicalGradientPattern");
+    combobox->addItem("RadialGradientPattern");
     layBrushS->addWidget(brushSl);
     layBrushS->addWidget(combobox);
     mainlay->addLayout(layBrushS);

@@ -1,6 +1,6 @@
 #include "abstractfigure.h"
 
-abstractFigure::abstractFigure()
+abstractfigure::abstractfigure()
 {
 
 }

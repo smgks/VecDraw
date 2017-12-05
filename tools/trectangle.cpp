@@ -4,34 +4,39 @@
 
 tRectangle::tRectangle()
 {
+    pen = new QPen;
+    brush = new QBrush;
+    rect = NULL;
     setText("rectangle");
+    angle = 1;
 }
 void tRectangle::draw(QGraphicsScene *scene)
 {
-    angle = 1;
-    rect->draw(scene);
+    if (rect){
+        scene->removeItem(rect);
+        scene->addItem(rect);
+    }
 }
 
 void tRectangle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
-        QPointF *point = new QPointF;
-        *point = event->scenePos();
-        info::figurStack.at(info::figurStack.length()-1)->addpoint(point);
+        QPointF *temppoint = new QPointF;
+        *temppoint = event->scenePos();
+        rect->addPoint(temppoint);
     }
 }
 void tRectangle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
         rect = new fRect;
-        QPointF *point = new QPointF;
-        *point = event->scenePos();
-        setPenR();
-        rect->setBrush(brush);
-        rect->setPen(pen);
-        rect->addpoint(point);
         rect->setAngle(angle);
-        info::figurStack.push_back(rect);
+        rect->setPen(*pen);
+        rect->setBrush(*brush);
+        QPointF *temppoint = new QPointF;
+        *temppoint = event->scenePos();
+        rect->setPos(*temppoint);
+        rect->addPoint(temppoint);
     }
 }
 void tRectangle::setbar(TopToolBar *bar){
@@ -81,11 +86,24 @@ void tRectangle::setbar(TopToolBar *bar){
     brushSl->setText("Brush Style");
     layBrushS = new QVBoxLayout;
     combobox = new QComboBox;
-    combobox->addItem("NoBrush");combobox->addItem("SolidPattern");combobox->addItem("Dense1Pattern");combobox->addItem("Dense2Pattern");combobox->addItem("Dense3Pattern");combobox->addItem("Dense4Pattern");combobox->addItem(
-                 "Dense5Pattern");combobox->addItem("Dense6Pattern");combobox->addItem("Dense7Pattern");combobox->addItem(
-                 "HorPattern");combobox->addItem("VerPattern");combobox->addItem("CrossPattern");combobox->addItem(
-                 "BDiagPattern");combobox->addItem("FDiagPattern");combobox->addItem("DiagCrossPattern");combobox->addItem(
-                 "LinearGradientPattern");combobox->addItem("ConicalGradientPattern");combobox->addItem("RadialGradientPattern");
+    combobox->addItem("NoBrush");
+    combobox->addItem("SolidPattern");
+    combobox->addItem("Dense1Pattern");
+    combobox->addItem("Dense2Pattern");
+    combobox->addItem("Dense3Pattern");
+    combobox->addItem("Dense4Pattern");
+    combobox->addItem("Dense5Pattern");
+    combobox->addItem("Dense6Pattern");
+    combobox->addItem("Dense7Pattern");
+    combobox->addItem("HorPattern");
+    combobox->addItem("VerPattern");
+    combobox->addItem("CrossPattern");
+    combobox->addItem("BDiagPattern");
+    combobox->addItem("FDiagPattern");
+    combobox->addItem("DiagCrossPattern");
+    combobox->addItem("LinearGradientPattern");
+    combobox->addItem("ConicalGradientPattern");
+    combobox->addItem("RadialGradientPattern");
     layBrushS->addWidget(brushSl);
     layBrushS->addWidget(combobox);
     mainlay->addLayout(layBrushS);
@@ -103,7 +121,7 @@ void tRectangle::setbar(TopToolBar *bar){
 }
 void tRectangle::setPenR()
 {
-    pen.setWidth(penRvaul->value());
+    pen->setWidth(penRvaul->value());
     angle = angleBox->value();
 }
 void tRectangle::setPenC()
@@ -111,7 +129,7 @@ void tRectangle::setPenC()
     QColor temp = QColorDialog::getColor();
     if (!temp.isValid() ) {
     }
-    pen.setColor(temp);
+    pen->setColor(temp);
 
 }
 void tRectangle::setBrushC()
@@ -119,10 +137,10 @@ void tRectangle::setBrushC()
     QColor temp = QColorDialog::getColor();
     if (!temp.isValid() ) {
     }
-    brush.setColor(temp);
+    brush->setColor(temp);
 }
 
 void tRectangle::setBrushstyle(int a)
 {
-    brush.setStyle(Qt::BrushStyle(a));
+    brush->setStyle(Qt::BrushStyle(a));
 }

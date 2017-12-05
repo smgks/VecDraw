@@ -1,0 +1,66 @@
+#include "tselection.h"
+
+#include <QGraphicsSceneMouseEvent>
+#include <QTransform>
+#include <QGraphicsItem>
+#include <QGraphicsEffect>
+
+#include "figures/abstractfigure.h"
+
+tSelection::tSelection()
+{
+    lpos = new QPointF;
+    lScene = NULL;
+}
+
+void tSelection::draw(QGraphicsScene *scene)
+{
+    lScene = scene;
+}
+
+void tSelection::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(lScene){
+        lScene->addRect(QRectF(lpos->x(),lpos->y(),event->scenePos().x(),event->scenePos().y()+5));
+        items = lScene->items(QRectF(lpos->x(),lpos->y(),event->scenePos().x(),event->scenePos().y())).toVector();
+        for (int i = 0; i < items.length(); ++i) {
+            items[i]->setFlag(items[i]->ItemIsSelectable,1);
+            items[i]->setSelected(1);
+        }
+    }
+}
+void tSelection::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+        *lpos = event->scenePos();
+    if(lScene){
+        items.clear();
+        items.append(lScene->itemAt(*lpos,QTransform()));
+        QGraphicsItem *temp;
+        temp = lScene->itemAt(*lpos,QTransform());
+        lScene->removeItem(temp);
+        if (temp){
+            temp->setFlag(temp->ItemIsSelectable,1);
+
+            temp->setSelected(1);
+
+            lScene->addItem(temp);
+        }
+        lScene->update();
+    }
+}
+void tSelection::setbar(TopToolBar *bar)
+{
+    widget = new QWidget;
+    lay = new QHBoxLayout;
+    del = new QPushButton("Del");
+    bar->addWidget(widget);
+    widget->setLayout(lay);
+    lay->addWidget(del);
+    connect(del,SIGNAL(clicked(bool)),this,SLOT(delitems()));
+}
+void tSelection::delitems()
+{
+    for (int i = 0; i < items.length(); ++i) {
+        lScene->removeItem(items[i]);
+    }
+}

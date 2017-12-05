@@ -1,15 +1,14 @@
 #ifndef ABSTRACTFIGURE_H
 #define ABSTRACTFIGURE_H
 
-#include <QObject>
-#include <QGraphicsScene>
-class abstractFigure
+#include <QGraphicsItem>
+
+class abstractfigure : public QGraphicsItem
 {
 public:
-    explicit abstractFigure();
-    virtual void addpoint(QPointF *point) = 0;
-    virtual void draw(QGraphicsScene *scene) = 0;
-    virtual void setPen(QPen p){}
+    abstractfigure();
+    virtual void setSelection(int s)=0;
+    virtual void addPoint(QPointF *point)=0;
 };
 
 #endif // ABSTRACTFIGURE_H

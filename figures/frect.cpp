@@ -2,45 +2,78 @@
 #include <QGraphicsItem>
 #include <QPainterPath>
 #include <QPainter>
-fRect::fRect()
+
+#include "sceneinfo.h"
+#include "tools/tselection.h"
+
+fRect::fRect(QObject *parent) : QObject(parent) , abstractfigure()
 {
-    pen = new QPen;
-    brush = new QBrush;
     angle = 1;
-    startPoint = new QPointF;
     startPoint = NULL;
-    endPoint = new QPointF;
     endPoint = NULL;
+    sel=0;
 }
 
-void fRect::addpoint(QPointF *point)
-{   if (!startPoint){
-        startPoint = point;
-        endPoint = point;
-    }else{
-        endPoint = point;
+QRectF fRect::boundingRect() const
+{
+    return QRectF(0,
+                  0,
+                  endPoint->x()-startPoint->x(),
+                  endPoint->y()-startPoint->y());
+}
+
+void fRect::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->setPen(pen);
+    painter->setBrush(brush);
+    QPointF *tempP = new QPointF(0 > endPoint->x()-startPoint->x() ? endPoint->x()-startPoint->x() : 0,
+                                 0 > endPoint->y()-startPoint->y() ? endPoint->y()-startPoint->y() : 0
+                                 );
+    QRectF *tempR = new QRectF(*tempP,QSize(abs(endPoint->x()-startPoint->x()),abs(endPoint->y()-startPoint->y())));
+    painter->drawRoundedRect(*tempR,angle,angle);
+    if(isSelected()){
+        QPen temppen;
+        temppen.setColor(Qt::green);
+        painter->setPen(temppen);
+        painter->drawEllipse(QPointF(endPoint->x()-startPoint->x(),endPoint->y()-startPoint->y()),5,5);
+        painter->drawEllipse(QPointF(0,0),5,5);
+        temppen.setColor(Qt::red);
+        painter->setPen(temppen);
+        painter->drawEllipse(QPointF(endPoint->x()-startPoint->x(),endPoint->y()-startPoint->y()),3,3);
+        painter->drawEllipse(QPointF(0,0),3,3);
     }
 }
-void fRect::draw(QGraphicsScene *scene)
-{
-    QRectF *rect = new QRectF;
-    rect->setCoords(startPoint->x() > endPoint->x() ? endPoint->x() : startPoint->x(),//тут возникни проблемы с отрисовкой квадрата
-                    startPoint->y() > endPoint->y() ? endPoint->y() : startPoint->y(),//справа на лево , углы не округлялись
-                    endPoint->x() < startPoint->x() ? startPoint->x() : endPoint->x(),
-                    endPoint->y() < startPoint->y() ? startPoint->y() : endPoint->y());//поэтому отрисовка только слева на право
-    QPainterPath *tempPath = new QPainterPath;
-    tempPath->addRoundRect(*rect,angle);
-    scene->addPolygon(tempPath->toFillPolygon(),*pen,*brush);
-}
-void fRect::setPen(QPen p)
-{
-    *pen = p;
-}
-void fRect::setBrush(QBrush b)
-{
-    *brush = b;
-}
+
 void fRect::setAngle(int a)
 {
     angle = a;
+}
+
+void fRect::setPen(QPen p)
+{
+    pen = p;
+}
+
+void fRect::setBrush(QBrush b)
+{
+    brush = b;
+}
+
+void fRect::setSelection(int s)
+{
+    sel = s;
+}
+
+void fRect::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    sel=1;
+}
+void fRect::addPoint(QPointF *point)
+{
+    if (!startPoint){
+            startPoint = point;
+            endPoint = point;
+        }else{
+            endPoint = point;
+    }
 }

@@ -10,8 +10,7 @@ tMagnifier::tMagnifier(QSpinBox *spinBox)
 }
 void tMagnifier::draw(QGraphicsScene *scene)
 {
-    scene->update();
-
+    //scene->update();
 }
 
 void tMagnifier::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -27,6 +26,6 @@ void tMagnifier::mousePressEvent(QGraphicsSceneMouseEvent *event)
         ScaleSpin->setValue(ScaleSpin->value()/2);
     }
 }
-void tMagnifier::setbar(TopToolBar *bar){
-    //PASS
+void tMagnifier::setbar(TopToolBar *bar)
+{
 }

@@ -17,7 +17,6 @@ SOURCES += main.cpp\
     toptoolbar.cpp \
     tools/abstracttool.cpp \
     figures/fpolyline.cpp \
-    figures/abstractfigure.cpp \
     tools/tpolyline.cpp \
     tools/trectangle.cpp \
     figures/frect.cpp \
@@ -26,7 +25,9 @@ SOURCES += main.cpp\
     figures/fline.cpp \
     tools/tline.cpp \
     tools/tmagnifier.cpp \
-    fixedsize.cpp
+    fixedsize.cpp \
+    tools/tselection.cpp \
+    figures/abstractfigure.cpp
 
 HEADERS  += mainwindow.h \
     mainscene.h \
@@ -34,7 +35,6 @@ HEADERS  += mainwindow.h \
     toptoolbar.h \
     tools/abstracttool.h \
     figures/fpolyline.h \
-    figures/abstractfigure.h \
     tools/tpolyline.h \
     tools/trectangle.h \
     sceneinfo.h \
@@ -44,7 +44,9 @@ HEADERS  += mainwindow.h \
     figures/fline.h \
     tools/tline.h \
     tools/tmagnifier.h \
-    fixedsize.h
+    fixedsize.h \
+    tools/tselection.h \
+    figures/abstractfigure.h
 
 FORMS    += mainwindow.ui
 #══════════████████═════██████
