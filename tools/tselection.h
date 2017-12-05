@@ -21,9 +21,16 @@ private:
 
     QWidget *widget;
     QHBoxLayout *lay;
+    QVBoxLayout *Vlay;
+
+    QPushButton *upB;
+    QPushButton *downB;
+
     QPushButton *del;
 private slots:
     void delitems();
+    void downBPress();
+    void upBPress();
 };
 
 #endif // TSELECTION_H

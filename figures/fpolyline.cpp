@@ -10,7 +10,7 @@ fPolyline::fPolyline(QObject *parent) : QObject(parent), abstractfigure()
 
 QRectF fPolyline::boundingRect() const
 {
-        return QRectF(QPointF(minX-points[0].x(),minY-points[0].y()),QSizeF(maxX-minX,maxY-minY));
+        return QRectF(QPointF(minX-points[0].x(),minY-points[0].y()),QSizeF(abs(maxX-minX),abs(maxY-minY)));
 }
 
 void fPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
