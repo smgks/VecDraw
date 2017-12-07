@@ -24,25 +24,6 @@ void fPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     if(isSelected()){
         QPen temppen;
         temppen.setWidth(1/info::globalScale->getScaleX());
-//        temppen.setColor(Qt::blue);
-//        painter->setPen(temppen);
-//        painter->drawRect(QRectF(QPointF(minX-points[0].x(),
-//                                 minY-points[0].y()),
-//                QSizeF(5/info::globalScale->getScaleX(),
-//                       5/info::globalScale->getScaleX())));
-//        painter->drawRect(QRectF(QPointF(maxX-points[0].x()-5/info::globalScale->getScaleX(),
-//                                 maxY-points[0].y()-5/info::globalScale->getScaleX()),
-//                QSizeF(5/info::globalScale->getScaleX(),
-//                       5/info::globalScale->getScaleX())));
-//        temppen.setColor(Qt::yellow);
-//        painter->setPen(temppen);
-//        painter->drawRect(QRectF(QPointF(minX-points[0].x()+1/info::globalScale->getScaleX(),
-//                                 minY-points[0].y()+1/info::globalScale->getScaleX()),
-//                QSizeF(3/info::globalScale->getScaleX(),3/info::globalScale->getScaleX())));
-//        painter->drawRect(QRectF(QPointF(maxX-points[0].x()-4/info::globalScale->getScaleX(),
-//                                 maxY-points[0].y()-4/info::globalScale->getScaleX()),
-//                QSizeF(3/info::globalScale->getScaleX(),
-//                       3/info::globalScale->getScaleX())));
         for (int var = 0; var < points.length(); ++var) {
             temppen.setColor(Qt::red);
             painter->setPen(temppen);
