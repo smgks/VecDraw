@@ -8,13 +8,21 @@ fLine::fLine(QObject *parent) : QObject(parent), abstractfigure()
 
 QRectF fLine::boundingRect() const
 {
-    return QRectF(0,0,endPoint->x()-startPoint->x(),endPoint->y()-startPoint->y());
+    return QRectF(QPointF(0 < endPoint->x()-startPoint->x() ? 0 : endPoint->x()-startPoint->x(),
+           0 < endPoint->y()-startPoint->y() ? 0 : endPoint->y()-startPoint->y()),
+            QSizeF(abs(endPoint->x()-startPoint->x()),
+                   abs(endPoint->y()-startPoint->y())));
+    //return QRectF(0,0,abs(endPoint->x()-startPoint->x()),abs(endPoint->y()-startPoint->y()));
 }
 
 void fLine::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setPen(pen);
     painter->drawLine(0,0,endPoint->x()-startPoint->x(),endPoint->y()-startPoint->y());
+    painter->drawRect(QRectF(QPointF(0 < endPoint->x()-startPoint->x() ? 0 : endPoint->x()-startPoint->x(),
+                                     0 < endPoint->y()-startPoint->y() ? 0 : endPoint->y()-startPoint->y()),
+                                      QSizeF(abs(endPoint->x()-startPoint->x()),
+                                             abs(endPoint->y()-startPoint->y()))));
     if(isSelected()){
         QPen temppen;
         temppen.setColor(Qt::green);
@@ -49,43 +57,70 @@ void fLine::setPen(QPen p)
 void fLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if(isSelected() && (info::tool->text()=="cursor")){
-        if(rigthA(event) || leftA(event)){
-
         if(rigthA(event)){
-            endPoint->setX(endPoint->x()+event->scenePos().x()-event->lastScenePos().x());
-            endPoint->setY(endPoint->y()+event->scenePos().y()-event->lastScenePos().y());
+            QPointF *tempPoint = new QPointF;
+            tempPoint->setX(endPoint->x()+(event->scenePos().x() - event->lastScenePos().x()));
+            tempPoint->setY(endPoint->y()+(event->scenePos().y() - event->lastScenePos().y()));
+            addPoint(tempPoint);
             update();
+            scene()->update();
         }
+        else{
         if(leftA(event)){
-            startPoint->setX(startPoint->x()+event->scenePos().x()-event->lastScenePos().x());
-            startPoint->setY(startPoint->y()+event->scenePos().y()-event->lastScenePos().y());
+            QPointF *tempPoint = new QPointF;
+            tempPoint->setX(endPoint->x()-(event->scenePos().x() - event->lastScenePos().x()));
+            tempPoint->setY(endPoint->y()-(event->scenePos().y() - event->lastScenePos().y()));
             setPos(pos().x() + (event->scenePos().x() - event->lastScenePos().x()),
                    pos().y() + (event->scenePos().y() - event->lastScenePos().y()));
+            addPoint(tempPoint);
             update();
+            scene()->update();
         }
 
-           } else{
+            else{
         setPos(pos().x() + (event->scenePos().x() - event->lastScenePos().x()),
                pos().y() + (event->scenePos().y() - event->lastScenePos().y()));
         update();
             }
         }
     }
+}
 
 void fLine::mousePressEvent(QGraphicsSceneMouseEvent *event){
-
+update();
 }
 
 bool fLine::rigthA(QGraphicsSceneMouseEvent *event){
-    return ((event->scenePos().x()-pos().x()>=endPoint->x()-startPoint->x()-10/info::globalScale->getScaleX()) &&        //правый якорь
-            (event->scenePos().y()-pos().y()>=endPoint->y()-startPoint->y()-10/info::globalScale->getScaleX())
-            || (event->scenePos().x()-pos().x()>endPoint->x()-startPoint->x()-10/info::globalScale->getScaleX())
-            || (event->scenePos().y()-pos().y()>endPoint->y()-startPoint->y()-10/info::globalScale->getScaleY()));}
+    bool res = 1;
+    if (endPoint->x()-startPoint->x() > 0){
+        res = res*(event->scenePos().x()-pos().x() >= endPoint->x()-startPoint->x()-10/info::globalScale->getScaleX());
+    }
+    if (endPoint->y()-startPoint->y() > 0){
+        res = res*(event->scenePos().y()-pos().y() >= endPoint->y()-startPoint->y()-10/info::globalScale->getScaleY());
+    }
+    if (endPoint->x()-startPoint->x() < 0){
+        res = res*(event->scenePos().x()-pos().x() <= endPoint->x()-startPoint->x()+10/info::globalScale->getScaleX());
+    }
+    if (endPoint->y()-startPoint->y() < 0){
+        res = res*(event->scenePos().y()-pos().y() <= endPoint->y()-startPoint->y()+10/info::globalScale->getScaleY());
+    }
+    return res;
+}
 bool fLine::leftA(QGraphicsSceneMouseEvent *event){
-    return (((event->scenePos().x()-pos().x()<=10/info::globalScale->getScaleX()) &&          //левый якорь
-             (event->scenePos().y()-pos().y()<=10/info::globalScale->getScaleX())
-             ) || (event->scenePos().x()-pos().x()<10/info::globalScale->getScaleX())
-                   || (event->scenePos().y()-pos().y()<10/info::globalScale->getScaleY()));
+    bool res = 1;
+    if (endPoint->x()-startPoint->x() > 0){
+        res = res*(event->scenePos().x()-pos().x()<=10/info::globalScale->getScaleX());
+    }
+    if (endPoint->y()-startPoint->y() > 0){
+        res = res*(event->scenePos().y()-pos().y()<=10/info::globalScale->getScaleY());
+    }
+    if (endPoint->x()-startPoint->x() < 0){
+        res = res*(event->scenePos().x()-pos().x()>=-10/info::globalScale->getScaleX());
+    }
+    if (endPoint->y()-startPoint->y() < 0){
+        res = res*(event->scenePos().y()-pos().y()>=-10/info::globalScale->getScaleY());
+    }
+    return res;
 }
 
 void fLine::addPoint(QPointF *point)

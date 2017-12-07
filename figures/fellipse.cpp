@@ -8,7 +8,10 @@ fEllipse::fEllipse(QObject *parent) : QObject(parent), abstractfigure()
 
 QRectF fEllipse::boundingRect() const
 {
-    return QRectF(0-2,0-2,abs(endPoint->x()-startPoint->x()+4),abs(endPoint->y()-startPoint->y())+4);
+    return QRectF(QPointF(0 < endPoint->x()-startPoint->x() ? 0 : endPoint->x()-startPoint->x(),
+           0 < endPoint->y()-startPoint->y() ? 0 : endPoint->y()-startPoint->y()),
+            QSizeF(abs(endPoint->x()-startPoint->x()),
+                   abs(endPoint->y()-startPoint->y())));
 }
 
 void fEllipse::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -54,40 +57,67 @@ void fEllipse::setBrush(QBrush b)
 
 void fEllipse::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(isSelected() && (info::tool->text()=="cursor")){
-        if(rigthA(event) || leftA(event)){
-
-        if(rigthA(event)){
-            endPoint->setX(endPoint->x()+event->scenePos().x()-event->lastScenePos().x());
-            endPoint->setY(endPoint->y()+event->scenePos().y()-event->lastScenePos().y());
-            update();
-        }
-        if(leftA(event)){
-            startPoint->setX(startPoint->x()+event->scenePos().x()-event->lastScenePos().x());
-            startPoint->setY(startPoint->y()+event->scenePos().y()-event->lastScenePos().y());
-            setPos(pos().x() + (event->scenePos().x() - event->lastScenePos().x()),
-                   pos().y() + (event->scenePos().y() - event->lastScenePos().y()));
-            update();
-        }
-
-           } else{
+if(isSelected() && (info::tool->text()=="cursor")){
+    if(rigthA(event)){
+        QPointF *tempPoint = new QPointF;
+        tempPoint->setX(endPoint->x()+(event->scenePos().x() - event->lastScenePos().x()));
+        tempPoint->setY(endPoint->y()+(event->scenePos().y() - event->lastScenePos().y()));
+        addPoint(tempPoint);
+        update();
+        scene()->update();
+    }
+    else{
+    if(leftA(event)){
+        QPointF *tempPoint = new QPointF;
+        tempPoint->setX(endPoint->x()-(event->scenePos().x() - event->lastScenePos().x()));
+        tempPoint->setY(endPoint->y()-(event->scenePos().y() - event->lastScenePos().y()));
         setPos(pos().x() + (event->scenePos().x() - event->lastScenePos().x()),
                pos().y() + (event->scenePos().y() - event->lastScenePos().y()));
+        addPoint(tempPoint);
         update();
-            }
-        }
+        scene()->update();
     }
 
+        else{
+    setPos(pos().x() + (event->scenePos().x() - event->lastScenePos().x()),
+           pos().y() + (event->scenePos().y() - event->lastScenePos().y()));
+    update();
+        }
+    }
+}
+}
+
 bool fEllipse::rigthA(QGraphicsSceneMouseEvent *event){
-    return ((event->scenePos().x()-pos().x()>=endPoint->x()-startPoint->x()-10/info::globalScale->getScaleX()) &&        //правый якорь
-            (event->scenePos().y()-pos().y()>=endPoint->y()-startPoint->y()-10/info::globalScale->getScaleX())
-            || (event->scenePos().x()-pos().x()>endPoint->x()-startPoint->x()-10/info::globalScale->getScaleX())
-            || (event->scenePos().y()-pos().y()>endPoint->y()-startPoint->y()-10/info::globalScale->getScaleY()));}
+    bool res = 1;
+    if (endPoint->x()-startPoint->x() > 0){
+        res = res*(event->scenePos().x()-pos().x() >= endPoint->x()-startPoint->x()-10/info::globalScale->getScaleX());
+    }
+    if (endPoint->y()-startPoint->y() > 0){
+        res = res*(event->scenePos().y()-pos().y() >= endPoint->y()-startPoint->y()-10/info::globalScale->getScaleY());
+    }
+    if (endPoint->x()-startPoint->x() < 0){
+        res = res*(event->scenePos().x()-pos().x() <= endPoint->x()-startPoint->x()+10/info::globalScale->getScaleX());
+    }
+    if (endPoint->y()-startPoint->y() < 0){
+        res = res*(event->scenePos().y()-pos().y() <= endPoint->y()-startPoint->y()+10/info::globalScale->getScaleY());
+    }
+    return res;
+}
 bool fEllipse::leftA(QGraphicsSceneMouseEvent *event){
-    return (((event->scenePos().x()-pos().x()<=10/info::globalScale->getScaleX()) &&          //левый якорь
-             (event->scenePos().y()-pos().y()<=10/info::globalScale->getScaleX())
-             ) || (event->scenePos().x()-pos().x()<10/info::globalScale->getScaleX())
-                   || (event->scenePos().y()-pos().y()<10/info::globalScale->getScaleY()));
+    bool res = 1;
+    if (endPoint->x()-startPoint->x() > 0){
+        res = res*(event->scenePos().x()-pos().x()<=10/info::globalScale->getScaleX());
+    }
+    if (endPoint->y()-startPoint->y() > 0){
+        res = res*(event->scenePos().y()-pos().y()<=10/info::globalScale->getScaleY());
+    }
+    if (endPoint->x()-startPoint->x() < 0){
+        res = res*(event->scenePos().x()-pos().x()>=-10/info::globalScale->getScaleX());
+    }
+    if (endPoint->y()-startPoint->y() < 0){
+        res = res*(event->scenePos().y()-pos().y()>=-10/info::globalScale->getScaleY());
+    }
+    return res;
 }
 
 void fEllipse::mousePressEvent(QGraphicsSceneMouseEvent *event){

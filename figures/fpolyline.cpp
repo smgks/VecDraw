@@ -24,25 +24,33 @@ void fPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     if(isSelected()){
         QPen temppen;
         temppen.setWidth(1/info::globalScale->getScaleX());
-        temppen.setColor(Qt::green);
-        painter->setPen(temppen);
-        painter->drawRect(QRectF(QPointF(minX-points[0].x(),
-                                 minY-points[0].y()),
-                QSizeF(5/info::globalScale->getScaleX(),
-                       5/info::globalScale->getScaleX())));
-        painter->drawRect(QRectF(QPointF(maxX-points[0].x()-5/info::globalScale->getScaleX(),
-                                 maxY-points[0].y()-5/info::globalScale->getScaleX()),
-                QSizeF(5/info::globalScale->getScaleX(),
-                       5/info::globalScale->getScaleX())));
-        temppen.setColor(Qt::red);
-        painter->setPen(temppen);
-        painter->drawRect(QRectF(QPointF(minX-points[0].x()+1/info::globalScale->getScaleX(),
-                                 minY-points[0].y()+1/info::globalScale->getScaleX()),
-                QSizeF(3/info::globalScale->getScaleX(),3/info::globalScale->getScaleX())));
-        painter->drawRect(QRectF(QPointF(maxX-points[0].x()-4/info::globalScale->getScaleX(),
-                                 maxY-points[0].y()-4/info::globalScale->getScaleX()),
-                QSizeF(3/info::globalScale->getScaleX(),
-                       3/info::globalScale->getScaleX())));
+//        temppen.setColor(Qt::blue);
+//        painter->setPen(temppen);
+//        painter->drawRect(QRectF(QPointF(minX-points[0].x(),
+//                                 minY-points[0].y()),
+//                QSizeF(5/info::globalScale->getScaleX(),
+//                       5/info::globalScale->getScaleX())));
+//        painter->drawRect(QRectF(QPointF(maxX-points[0].x()-5/info::globalScale->getScaleX(),
+//                                 maxY-points[0].y()-5/info::globalScale->getScaleX()),
+//                QSizeF(5/info::globalScale->getScaleX(),
+//                       5/info::globalScale->getScaleX())));
+//        temppen.setColor(Qt::yellow);
+//        painter->setPen(temppen);
+//        painter->drawRect(QRectF(QPointF(minX-points[0].x()+1/info::globalScale->getScaleX(),
+//                                 minY-points[0].y()+1/info::globalScale->getScaleX()),
+//                QSizeF(3/info::globalScale->getScaleX(),3/info::globalScale->getScaleX())));
+//        painter->drawRect(QRectF(QPointF(maxX-points[0].x()-4/info::globalScale->getScaleX(),
+//                                 maxY-points[0].y()-4/info::globalScale->getScaleX()),
+//                QSizeF(3/info::globalScale->getScaleX(),
+//                       3/info::globalScale->getScaleX())));
+        for (int var = 0; var < points.length(); ++var) {
+            temppen.setColor(Qt::red);
+            painter->setPen(temppen);
+            painter->drawEllipse(QPointF(points[var].x()-points[0].x(),points[var].y()-points[0].y()),5/info::globalScale->getScaleX(),5/info::globalScale->getScaleX());
+            temppen.setColor(Qt::green);
+            painter->setPen(temppen);
+            painter->drawEllipse(QPointF(points[var].x()-points[0].x(),points[var].y()-points[0].y()),3/info::globalScale->getScaleX(),3/info::globalScale->getScaleX());
+        }
     }
 }
 
@@ -83,9 +91,46 @@ void fPolyline::addPoint(QPointF *point)
 void fPolyline::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if(isSelected() and (info::tool->text()=="cursor")){
-        setPos(pos().x() + (event->scenePos().x() - event->lastScenePos().x()),
-               pos().y() + (event->scenePos().y() - event->lastScenePos().y()));
     }
+    for (int i = 0; i < points.length(); ++i) {
+        if ((event->scenePos().x()-pos().x()+points[0].x() >= points[i].x()-5/info::globalScale->getScaleX()) &&
+            (event->scenePos().x()-pos().x()+points[0].x() <= points[i].x()+5/info::globalScale->getScaleX()) &&
+            (event->scenePos().y()-pos().y()+points[0].y() >= points[i].y()-5/info::globalScale->getScaleX()) &&
+            (event->scenePos().y()-pos().y()+points[0].y() <= points[i].y()+5/info::globalScale->getScaleX())){
+        QPointF *tempPoint = new QPointF;
+        tempPoint->setX(points[i].x()+(event->scenePos().x() - event->lastScenePos().x()));
+        tempPoint->setY(points[i].y()+(event->scenePos().y() - event->lastScenePos().y()));
+        points[i] = *tempPoint;
+        if (tempPoint->x()>maxX){
+            maxX=tempPoint->x();
+        }
+        if (tempPoint->y()>maxY){
+            maxY=tempPoint->y();
+        }
+        if (tempPoint->x()<minX){
+            minX=tempPoint->x();
+        }
+        if (tempPoint->y()<minY){
+            minY=tempPoint->y();
+        }
+        if (0==maxX){
+               maxX=tempPoint->x();
+        }
+        if (0==maxY){
+               maxY=tempPoint->y();
+        }
+        if (0==minX){
+               minX=tempPoint->x();
+        }
+        if (0==minY){
+               minY=tempPoint->y();
+        }
+        return ;
+        break;
+        }
+}
+    setPos(pos().x() + (event->scenePos().x() - event->lastScenePos().x()),
+           pos().y() + (event->scenePos().y() - event->lastScenePos().y()));
 }
 
 void fPolyline::mousePressEvent(QGraphicsSceneMouseEvent *event){

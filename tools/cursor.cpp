@@ -19,13 +19,27 @@ void tcursor::mousePressEvent(QGraphicsSceneMouseEvent *event){
             lScene->update();
         }
         else {
-//            for (int i = 0; i < lScene->items().length(); ++i) {
-//                lScene->items()[i]->setSelected(0);
-//            }
+            for (int i = 0; i < lScene->items().length(); ++i) {
+                lScene->items()[i]->setSelected(0);
+            }
         }
     }
 }
 void tcursor::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+//    if (lScene){
+//        QGraphicsItem *temp = Q_NULLPTR;
+//        temp = lScene->itemAt(event->scenePos(),QTransform());
+//        if (temp){
+//            temp->setFlag(temp->ItemIsSelectable,1);
+//            temp->setSelected(1);
+//            lScene->update();
+//        }
+//        else {
+//            for (int i = 0; i < lScene->items().length(); ++i) {
+//                lScene->items()[i]->setSelected(0);
+//            }
+//        }
+//    }
 }
 void tcursor::setbar(TopToolBar *bar){
 
