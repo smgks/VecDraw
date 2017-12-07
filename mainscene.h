@@ -16,6 +16,7 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void ReDraw();
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 signals:
 
 public slots:

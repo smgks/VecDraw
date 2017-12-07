@@ -23,14 +23,26 @@ void fPolyline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     }
     if(isSelected()){
         QPen temppen;
+        temppen.setWidth(1/info::globalScale->getScaleX());
         temppen.setColor(Qt::green);
         painter->setPen(temppen);
-        painter->drawEllipse(QPointF(minX-points[0].x(),minY-points[0].y()),5,5);
-        painter->drawEllipse(QPointF(maxX-points[0].x(),maxY-points[0].y()),5,5);
+        painter->drawRect(QRectF(QPointF(minX-points[0].x(),
+                                 minY-points[0].y()),
+                QSizeF(5/info::globalScale->getScaleX(),
+                       5/info::globalScale->getScaleX())));
+        painter->drawRect(QRectF(QPointF(maxX-points[0].x()-5/info::globalScale->getScaleX(),
+                                 maxY-points[0].y()-5/info::globalScale->getScaleX()),
+                QSizeF(5/info::globalScale->getScaleX(),
+                       5/info::globalScale->getScaleX())));
         temppen.setColor(Qt::red);
         painter->setPen(temppen);
-        painter->drawEllipse(QPointF(minX-points[0].x(),minY-points[0].y()),3,3);
-        painter->drawEllipse(QPointF(maxX-points[0].x(),maxY-points[0].y()),3,3);
+        painter->drawRect(QRectF(QPointF(minX-points[0].x()+1/info::globalScale->getScaleX(),
+                                 minY-points[0].y()+1/info::globalScale->getScaleX()),
+                QSizeF(3/info::globalScale->getScaleX(),3/info::globalScale->getScaleX())));
+        painter->drawRect(QRectF(QPointF(maxX-points[0].x()-4/info::globalScale->getScaleX(),
+                                 maxY-points[0].y()-4/info::globalScale->getScaleX()),
+                QSizeF(3/info::globalScale->getScaleX(),
+                       3/info::globalScale->getScaleX())));
     }
 }
 
@@ -53,7 +65,7 @@ void fPolyline::addPoint(QPointF *point)
     if (point->y()<minY){
         minY=point->y();
     }
-       points.push_back(*point);
+        points.push_back(*point);
     if (0==maxX){
            maxX=point->x();
     }
@@ -67,6 +79,15 @@ void fPolyline::addPoint(QPointF *point)
            minY=point->y();
     }
 }
-void fPolyline::setSelection(int s)
+
+void fPolyline::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    if(isSelected() and (info::tool->text()=="cursor")){
+        setPos(pos().x() + (event->scenePos().x() - event->lastScenePos().x()),
+               pos().y() + (event->scenePos().y() - event->lastScenePos().y()));
+    }
+}
+
+void fPolyline::mousePressEvent(QGraphicsSceneMouseEvent *event){
+
 }

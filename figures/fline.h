@@ -15,11 +15,13 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) ;
     void setPen(QPen p);
     void addPoint(QPointF *point);
-    void setSelection(int s);
 private:
     QPointF *startPoint,*endPoint;
     QPen pen;
-    //int min
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    bool leftA(QGraphicsSceneMouseEvent *event);
+    bool rigthA(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // FLINE_H

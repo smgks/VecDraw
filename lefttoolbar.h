@@ -11,6 +11,7 @@
 #include "tools/tline.h"
 #include "tools/tmagnifier.h"
 #include "tools/tselection.h"
+#include "tools/cursor.h"
 
 class LeftToolBar : public QToolBar
 {
@@ -26,6 +27,7 @@ private:
     tLine *Line;
     tMagnifier *Magnifier;
     tSelection *Selection;
+    tcursor *cursotool;
 
     TopToolBar *TopBar;
     QSpinBox *scalebox;
@@ -37,6 +39,7 @@ private slots:
     void LineClick();
     void MagnifierClick();
     void SelectionClick();
+    void cursotoolClick();
     void scaleChanged();
     void setScaleBox();
 };

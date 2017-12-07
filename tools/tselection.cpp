@@ -24,14 +24,19 @@ void tSelection::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (event->buttons() == Qt::LeftButton){
         if(lScene){
             for (int i = 0; i < items.length(); ++i) {
-                items[i]->setFlag(items[i]->ItemIsSelectable,0);
+                items[i]->setFlag(items[i]->ItemIsSelectable,1);
                 items[i]->setSelected(0);
             }
+
             lScene->update();
+
             QPointF *qwe = new QPointF(lpos->x() < event->scenePos().x() ? lpos->x() : event->scenePos().x(),
                                        lpos->y() < event->scenePos().y() ? lpos->y() : event->scenePos().y());
+
             QRectF *tr = new QRectF(*qwe,QSizeF(abs(event->scenePos().x()-lpos->x()),abs(event->scenePos().y()-lpos->y())));
+
             items = lScene->items(*tr).toVector();
+
             for (int i = 0; i < items.length(); ++i) {
                 items[i]->setFlag(items[i]->ItemIsSelectable,1);
                 items[i]->setSelected(1);
@@ -85,8 +90,11 @@ void tSelection::setbar(TopToolBar *bar)
 
 void tSelection::delitems()
 {
-    for (int i = 0; i < items.length(); ++i) {
-        lScene->removeItem(items[i]);
+    for (int i = 0; i < lScene->items().length(); ++i) {
+        if(lScene->items()[i]->isSelected()){
+            lScene->removeItem(lScene->items()[i]);
+            i--;
+        }
     }
     lScene->update();
 }
@@ -94,8 +102,8 @@ void tSelection::delitems()
 void tSelection::downBPress()
 {
     if (lScene){
-        for (int i = 0; i < items.length(); ++i) {
-            items[i]->setZValue(items[i]->zValue()-1);
+        for (int i = 0; i < lScene->items().length(); ++i) {
+            lScene->items()[i]->setZValue(lScene->items()[i]->zValue()-1);
         }
         lScene->update();
     }
@@ -103,8 +111,8 @@ void tSelection::downBPress()
 void tSelection::upBPress()
 {
     if (lScene){
-        for (int i = 0; i < items.length(); ++i) {
-            items[i]->setZValue(items[i]->zValue()-1);
+        for (int i = 0; i < lScene->items().length(); ++i) {
+            lScene->items()[i]->setZValue(lScene->items()[i]->zValue()+1);
         }
         lScene->update();
     }

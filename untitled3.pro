@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     tools/tmagnifier.cpp \
     fixedsize.cpp \
     tools/tselection.cpp \
-    figures/abstractfigure.cpp
+    figures/abstractfigure.cpp \
+    tools/cursor.cpp
 
 HEADERS  += mainwindow.h \
     mainscene.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     tools/tmagnifier.h \
     fixedsize.h \
     tools/tselection.h \
-    figures/abstractfigure.h
+    figures/abstractfigure.h \
+    tools/cursor.h
 
 FORMS    += mainwindow.ui
 #══════════████████═════██████

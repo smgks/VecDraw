@@ -12,6 +12,7 @@ LeftToolBar::LeftToolBar(TopToolBar *Bar)
     Polyline = new tPolyline;
     Rectangle = new tRectangle;
     Ellipse = new tEllipse;
+    cursotool = new tcursor;
     Line = new tLine;
     Magnifier = new tMagnifier(scalebox);
     Selection = new tSelection;
@@ -30,6 +31,7 @@ LeftToolBar::LeftToolBar(TopToolBar *Bar)
     addWidget(Line);
     addWidget(Magnifier);
     addWidget(Selection);
+    addWidget(cursotool);
     TopBar->hide();
     ////////
     connect(scalebox,SIGNAL(valueChanged(int)),this,SLOT(scaleChanged()));
@@ -39,6 +41,7 @@ LeftToolBar::LeftToolBar(TopToolBar *Bar)
     connect(Line,SIGNAL(clicked(bool)),this,SLOT(LineClick()));
     connect(Magnifier,SIGNAL(clicked(bool)),this,SLOT(MagnifierClick()));
     connect(Selection,SIGNAL(clicked(bool)),this,SLOT(SelectionClick()));
+    connect(cursotool,SIGNAL(clicked(bool)),this,SLOT(cursotoolClick()));
     ////////
 
     emit Polyline->click();
@@ -53,6 +56,14 @@ void LeftToolBar::PolylineClick(){
     info::tool = new tPolyline;
     dropStyle();
     Polyline->setStyleSheet("background-color: yellow");
+    info::tool->setbar(TopBar);
+}
+void LeftToolBar::cursotoolClick(){
+    TopBar->clear();
+    TopBar->show();
+    info::tool = new tcursor;
+    dropStyle();
+    cursotool->setStyleSheet("background-color: yellow");
     info::tool->setbar(TopBar);
 }
 void LeftToolBar::RectangleClick(){
@@ -109,6 +120,7 @@ void LeftToolBar::dropStyle(){
     Rectangle->setStyleSheet("background-color: silver");
     Polyline->setStyleSheet("background-color: silver");
     Selection->setStyleSheet("background-color: silver");
+    cursotool->setStyleSheet("background-color: silver");
 }
 
 void LeftToolBar::scaleChanged(){

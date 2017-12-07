@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     PaintZone->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     PaintZone->scale(info::globalScale->getScaleX(),info::globalScale->getScaleY());
     PaintZone->setStyleSheet("border-color: silver");
+    PaintZone->setMouseTracking(1);
     ui->centralWidget->setLayout(MainForm);
     MainForm->addWidget(LeftlBar);
     addToolBar(Qt::LeftToolBarArea,LeftlBar);

@@ -16,12 +16,13 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) ;
     void setPen(QPen p);
     void addPoint(QPointF *point);
-    void setSelection(int s);
 private:
     QVector<QPointF> points;
     QPen pen;
     int maxX,maxY;
     int minX,minY;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // FPOLYLINE_H

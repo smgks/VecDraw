@@ -18,14 +18,15 @@ public:
     void setBrush(QBrush b);
     void setAngle(int a);
     void addPoint(QPointF *point);
-    void setSelection(int s);
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 private:
     QPointF *startPoint,*endPoint;
     QPen pen;
     QBrush brush;
     int angle;
-    bool sel;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    bool leftA(QGraphicsSceneMouseEvent *event);
+    bool rigthA(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // FRECT_H
