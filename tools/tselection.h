@@ -27,10 +27,16 @@ private:
     QPushButton *downB;
 
     QPushButton *del;
+
+    TopToolBar *parentBar;
+    QVector<QWidget*> paramVec;
+    QVector<QAction*> acts;
+    void fromSelToBar();
 private slots:
     void delitems();
     void downBPress();
     void upBPress();
+
 };
 
 #endif // TSELECTION_H

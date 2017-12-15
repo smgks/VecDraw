@@ -8,6 +8,12 @@
 #include "tools/tpolyline.h"
 #include "tools/trectangle.h"
 
+#include "toolbtns/pencolor.h"
+#include "toolbtns/penradius.h"
+#include "toolbtns/brushcolor.h"
+#include "toolbtns/brushstyle.h"
+#include "toolbtns/recta.h"
+
 class MainScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -20,7 +26,6 @@ public:
 signals:
 
 public slots:
-
 };
 
 #endif // MAINSCENE_H

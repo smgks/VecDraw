@@ -2,7 +2,8 @@
 #define SCENEINFO_H
 
 #include "tools/abstracttool.h"
-//#include "figures/abstractfigure.h"
+#include "figures/abstractfigure.h"
+
 #include <QObject>
 
 namespace info {
@@ -38,5 +39,9 @@ namespace info {
     };
     extern abstractTool *tool;
     extern gScale *globalScale;
+    extern QVector<abstractfigure*> vecItems;
+    extern QPen pen;
+    extern QBrush brush;
+    extern int angle;
 }
 #endif // SCENEINFO_H

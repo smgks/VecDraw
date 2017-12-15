@@ -87,7 +87,6 @@ void LeftToolBar::EllipseClick(){
 void LeftToolBar::LineClick(){
     TopBar->clear();
     TopBar->show();
-    delete info::tool;
     info::tool = new tLine;
     dropStyle();
     Line->setStyleSheet("background-color: yellow");

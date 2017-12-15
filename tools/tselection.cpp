@@ -4,7 +4,8 @@
 #include <QTransform>
 #include <QGraphicsItem>
 #include <QGraphicsEffect>
-
+#include <iostream>
+#include "sceneinfo.h"
 #include "figures/abstractfigure.h"
 
 tSelection::tSelection()
@@ -30,20 +31,78 @@ void tSelection::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
             lScene->update();
 
-            QPointF *qwe = new QPointF(lpos->x() < event->scenePos().x() ? lpos->x() : event->scenePos().x(),
-                                       lpos->y() < event->scenePos().y() ? lpos->y() : event->scenePos().y());
+            QPointF qwe(lpos->x() < event->scenePos().x() ? lpos->x() : event->scenePos().x(),
+                        lpos->y() < event->scenePos().y() ? lpos->y() : event->scenePos().y());
 
-            QRectF *tr = new QRectF(*qwe,QSizeF(abs(event->scenePos().x()-lpos->x()),abs(event->scenePos().y()-lpos->y())));
+            QRectF tr(qwe,QSizeF(abs(event->scenePos().x()-lpos->x()),abs(event->scenePos().y()-lpos->y())));
 
-            items = lScene->items(*tr).toVector();
+            items = lScene->items(tr).toVector();
 
             for (int i = 0; i < items.length(); ++i) {
                 items[i]->setFlag(items[i]->ItemIsSelectable,1);
                 items[i]->setSelected(1);
             }
         }
+        fromSelToBar();
     }
 }
+
+void tSelection::fromSelToBar(){
+    //////////////////////
+    QVector<QString> strVec;
+    for (int var = paramVec.length()-1; var >= 0; --var) {
+        delete paramVec[var];
+    }
+    paramVec.clear();
+    for (int i = 0; i < info::vecItems.length(); ++i) {
+        QVector<QWidget*> tempV = info::vecItems[i]->getParams();
+        if(info::vecItems[i]->isSelected()){
+            for (int j = 0; j < tempV.length(); ++j) {
+                if (!(strVec.contains(tempV[j]->accessibleName()))){
+                    strVec.append(tempV[j]->accessibleName());
+                    paramVec.append(tempV[j]);
+                }else{
+                    delete tempV[j];
+                }
+            }
+        }
+    }
+    for (int i = 0; i < info::vecItems.length(); ++i) {
+        QVector<QWidget*> tempV = info::vecItems[i]->getParams();
+        if(info::vecItems[i]->isSelected()){
+            QVector<QString> strTempV;
+            for (int j = tempV.length()-1; j >= 0; --j){
+                strTempV.append(tempV[j]->accessibleName());
+                delete tempV[j];
+            }
+            for (int j = 0; j < strVec.length(); ++j){
+                if(!(strTempV.contains(strVec[j]))){
+                    strVec.remove(j);
+                    delete paramVec[j];
+                    paramVec.remove(j);
+                    j--;
+                }
+            }
+            strTempV.clear();
+        }
+    }
+
+    for (int var = 0; var < acts.length(); ++var) {
+        parentBar->removeAction(acts[var]);
+    }
+    acts.clear();
+
+    for (int var = 0; var < paramVec.length(); ++var) {
+        QAction* MyAction = parentBar -> addWidget (paramVec[var]) ;
+        paramVec[var]->setVisible(1);
+        acts.append(MyAction);
+        parentBar->addAction(MyAction);
+    }
+    strVec.clear();
+parentBar->update();
+}
+
+
 void tSelection::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
@@ -63,6 +122,7 @@ void tSelection::mousePressEvent(QGraphicsSceneMouseEvent *event)
             }
             lScene->update();
         }
+        fromSelToBar();
     }
 }
 void tSelection::setbar(TopToolBar *bar)
@@ -85,7 +145,7 @@ void tSelection::setbar(TopToolBar *bar)
     connect(del,SIGNAL(clicked(bool)),this,SLOT(delitems()));
     connect(upB,SIGNAL(clicked(bool)),this,SLOT(upBPress()));
     connect(downB,SIGNAL(clicked(bool)),this,SLOT(downBPress()));
-
+    parentBar = bar;
 }
 
 void tSelection::delitems()
@@ -93,6 +153,7 @@ void tSelection::delitems()
     for (int i = 0; i < lScene->items().length(); ++i) {
         if(lScene->items()[i]->isSelected()){
             lScene->removeItem(lScene->items()[i]);
+            info::vecItems.remove(i);
             i--;
         }
     }
@@ -103,7 +164,9 @@ void tSelection::downBPress()
 {
     if (lScene){
         for (int i = 0; i < lScene->items().length(); ++i) {
-            lScene->items()[i]->setZValue(lScene->items()[i]->zValue()-1);
+            if(lScene->items()[i]->isSelected()){
+                lScene->items()[i]->setZValue(lScene->items()[i]->zValue()-1);
+            }
         }
         lScene->update();
     }
@@ -112,7 +175,9 @@ void tSelection::upBPress()
 {
     if (lScene){
         for (int i = 0; i < lScene->items().length(); ++i) {
-            lScene->items()[i]->setZValue(lScene->items()[i]->zValue()+1);
+            if(lScene->items()[i]->isSelected()){
+                lScene->items()[i]->setZValue(lScene->items()[i]->zValue()+1);
+            }
         }
         lScene->update();
     }

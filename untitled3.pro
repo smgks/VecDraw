@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui svg xml widgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = untitled3
 TEMPLATE = app
@@ -28,7 +28,16 @@ SOURCES += main.cpp\
     fixedsize.cpp \
     tools/tselection.cpp \
     figures/abstractfigure.cpp \
-    tools/cursor.cpp
+    toolbtns/abstractTB.cpp \
+    tools/cursor.cpp \
+    toolbtns/penradius.cpp \
+    toolbtns/pencolor.cpp \
+    toolbtns/brushstyle.cpp \
+    toolbtns/brushcolor.cpp \
+    toolbtns/recta.cpp \
+    svgreader.cpp \
+    vgi.cpp \
+    loadfromvgi.cpp
 
 HEADERS  += mainwindow.h \
     mainscene.h \
@@ -48,7 +57,16 @@ HEADERS  += mainwindow.h \
     fixedsize.h \
     tools/tselection.h \
     figures/abstractfigure.h \
-    tools/cursor.h
+    toolbtns/abstractTB.h \
+    tools/cursor.h \
+    toolbtns/penradius.h \
+    toolbtns/pencolor.h \
+    toolbtns/brushstyle.h \
+    toolbtns/brushcolor.h \
+    toolbtns/recta.h \
+    svgreader.h \
+    vgi.h \
+    loadfromvgi.h
 
 FORMS    += mainwindow.ui
 #══════════████████═════██████

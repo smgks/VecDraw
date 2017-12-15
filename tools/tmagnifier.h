@@ -3,6 +3,7 @@
 
 #include "abstracttool.h"
 
+
 class tMagnifier : public abstractTool
 {
 

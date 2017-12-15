@@ -8,7 +8,7 @@
 
 #include "lefttoolbar.h"
 #include "mainscene.h"
-#include "sceneinfo.h"
+
 #include "toptoolbar.h"
 
 namespace Ui {

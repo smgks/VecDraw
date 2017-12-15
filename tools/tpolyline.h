@@ -4,6 +4,7 @@
 #include "abstracttool.h"
 #include "figures/fpolyline.h"
 
+
 class tPolyline : public abstractTool
 {
 public:
@@ -14,20 +15,6 @@ public:
     void setbar(TopToolBar *bar);
 private:
     fPolyline *Polyline;
-    QWidget *barWidget;
-
-    QHBoxLayout *mainlay;
-    QVBoxLayout *layPenR;
-    QLabel *penRl;
-    QSpinBox *penRvaul;
-    QVBoxLayout *layPenC;
-    QLabel *penCl;
-    QPushButton *penColor;
-    //////////////
-    QPen *pen;
-public slots:
-    void setPenR();
-    void setPenC();
 };
 
 #endif // TPOLYLINE_H

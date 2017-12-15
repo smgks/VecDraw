@@ -14,20 +14,7 @@ public:
     void setbar(TopToolBar *bar);
 private:
     fLine *line;
-    QWidget *barWidget;
 
-    QHBoxLayout *mainlay;
-    QVBoxLayout *layPenR;
-    QLabel *penRl;
-    QSpinBox *penRvaul;
-    QVBoxLayout *layPenC;
-    QLabel *penCl;
-    QPushButton *penColor;
-    //////////////
-    QPen *pen;
-public slots:
-    void setPenR();
-    void setPenC();
 };
 
 #endif // TLINE_H

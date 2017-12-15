@@ -4,10 +4,16 @@
 
 #include <QGraphicsScale>
 
+QVector<abstractfigure*> info::vecItems;
+
+QPen info::pen;
+QBrush info::brush;
+int info::angle;
+
 MainScene::MainScene(QObject *parent) :
     QGraphicsScene(parent)
 {
-    addRect(QRectF(0,0,0,0),QPen(Qt::color0));
+
 }
 
 void MainScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)

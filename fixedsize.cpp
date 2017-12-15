@@ -9,7 +9,7 @@ FixedSize::FixedSize()
         hSize = new QLabel;
             hSize->setText("Heigth");
         hSizeVaul = new QLineEdit;
-            hSizeVaul->setValidator(new QRegExpValidator(QRegExp("^([1-9][0-9]*|0)[0-9]{2}"), this));
+            hSizeVaul->setValidator(new QRegExpValidator(QRegExp("^([1-9][0-9]*|0|-)[0-9]{3}"), this));
     dHLay1->addWidget(hSize);
     dHLay1->addWidget(hSizeVaul);
     dVLay->addLayout(dHLay1);
@@ -17,7 +17,7 @@ FixedSize::FixedSize()
         wSize = new QLabel;
             wSize->setText("Weigth");
         wSizeVaul = new QLineEdit;
-            wSizeVaul->setValidator(new QRegExpValidator(QRegExp("^([1-9][0-9]*|0)[0-9]{2}"), this));
+            wSizeVaul->setValidator(new QRegExpValidator(QRegExp("^([1-9][0-9]*|0|-)[0-9]{3}"), this));
     dHLay2->addWidget(wSize);
     dHLay2->addWidget(wSizeVaul);
     dVLay->addLayout(dHLay2);

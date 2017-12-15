@@ -2,6 +2,7 @@
 #define ABSTRACTTOOL_H
 #include "toptoolbar.h"
 
+
 #include <QPushButton>
 #include <QGraphicsScene>
 #include <QToolBar>
@@ -23,7 +24,7 @@ public:
     virtual void setbar(TopToolBar *bar) = 0;
 public slots:
     virtual void setBrushstyle(int a){}
-    virtual void setPenR(){}
+    virtual void setPenR(int v){}
     virtual void setPenC(){}
     virtual void setBrushC(){}
 };
