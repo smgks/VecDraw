@@ -35,6 +35,7 @@ void tEllipse::mousePressEvent(QGraphicsSceneMouseEvent *event)
         ellipse->setPos(temppoint);
         ellipse->addPoint(temppoint);
         info::vecItems.append(ellipse);
+
     }
 }
 void tEllipse::setbar(TopToolBar *bar){

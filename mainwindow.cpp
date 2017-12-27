@@ -6,14 +6,21 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QFileDialog>
+#include <QClipboard>
+#include <iostream>
 #include <QSvgGenerator>
+#include <QXmlStreamWriter>
+#include <QFile>
+#include <QTextStream>
+
 #include "fixedsize.h"
 #include "svgreader.h"
 #include "vgi.h"
-#include <iostream>
 #include "loadfromvgi.h"
 info::gScale *(info::globalScale) = new info::gScale;
-
+QString info::path = "";
+QVector<QAction*> undoGroup;
+QVector<QAction*> redoGroup;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -47,11 +54,64 @@ MainWindow::MainWindow(QWidget *parent) :
     filemenu->addAction("Set fixed size");
     filemenu->addAction("Save to SVG");
     filemenu->addAction("Open from SVG");
+    filemenu->addAction("Save to vgi as");
     filemenu->addAction("Save to vgi");
     filemenu->addAction("Open from vgi");
+    this->setWindowTitle(QString("Unnamed") + QString(" - not saved"));
     connect(LeftlBar,SIGNAL(changeScale()),this,SLOT(setMainScale()));
 
     connect(filemenu,SIGNAL(triggered(QAction*)),this,SLOT(clearScene(QAction*)));
+}
+
+void MainWindow::closeEvent(QCloseEvent *event){
+
+    QWidget *dialog = new QWidget;
+    QVBoxLayout *Vlay = new QVBoxLayout;
+    QHBoxLayout *Hlay = new QHBoxLayout;
+    QLabel *lb = new QLabel;
+    QPushButton *yesBtn = new QPushButton;
+    QPushButton *noBtn = new QPushButton;
+    QPushButton *ignoreBtn = new QPushButton;
+
+    dialog->setLayout(Vlay);
+    dialog->setFixedSize(240,80);
+    Vlay->addWidget(lb);
+    lb->setText("you want to save it?");
+    lb->setAlignment(Qt::AlignCenter);
+    Vlay->addLayout(Hlay);
+    Hlay->addWidget(noBtn);
+    noBtn->setText("No");
+    Hlay->addWidget(ignoreBtn);
+    connect(noBtn,SIGNAL(clicked(bool)),this,SLOT(exitWithoutSaving()));
+    ignoreBtn->setText("back");
+    Hlay->addWidget(yesBtn);
+    yesBtn->setText("Yes");
+    connect(yesBtn,SIGNAL(clicked(bool)),this,SLOT(exitWithSaving()));
+    dialog->show();
+    event->ignore();
+}
+
+void MainWindow::exitWithSaving(){
+    if (info::path==""){
+        for (int var = 0; var < info::vecItems.length(); ++var) {
+            info::vecItems[var]->setSelected(0);
+        }
+        QString newPath = QFileDialog::getSaveFileName(this, trUtf8("Save VGI"),
+            info::path, tr("VGI files (*.vgi)"));
+
+        if (newPath.isEmpty())
+                return;
+        info::path = newPath;
+        vgi saving(info::path);
+    }
+    else{
+        vgi saving(info::path);
+    }
+    exit(0);
+}
+
+void MainWindow::exitWithoutSaving(){
+    exit(0);
 }
 
 void MainWindow::setMainScale(){
@@ -75,8 +135,10 @@ void MainWindow::clearScene(QAction *act)
         delete info::tool;
         delete LeftlBar;
         LeftlBar = new LeftToolBar(TopBar);
-        MainForm->addWidget(LeftlBar);
+        MainForm->addWidget(LeftlBar);this->setWindowTitle(info::path);
         addToolBar(Qt::LeftToolBarArea,LeftlBar);
+        info::path="";
+        this->setWindowTitle("unnamed");
     }
     if ((act->text()) == "Set fixed size"){
         FixedSize *tempDialog = new FixedSize;
@@ -84,42 +146,32 @@ void MainWindow::clearScene(QAction *act)
     }
     if(act->text() == "Open from vgi"){
 
-        QString path;
         QString newPath = QFileDialog::getOpenFileName(this, trUtf8("Open VGI"),
-            path);
+            info::path);
         if (newPath.isEmpty())
                 return;
-        path = newPath;
-        loadFromvgi temp(path,scene);
-        std::cout<<"qqq\n";
+        info::path = newPath;
+        loadFromvgi temp(info::path,scene);
+    }
+    if ((act->text()) == "Save to vgi as"){
+        saveAsDialog();
     }
     if ((act->text()) == "Save to vgi"){
-        for (int var = 0; var < info::vecItems.length(); ++var) {
-            info::vecItems[var]->setSelected(0);
-        }
-        QString path;
-        QString newPath = QFileDialog::getSaveFileName(this, trUtf8("Save VGI"),
-            path, tr("VGI files (*.vgi)"));
-
-        if (newPath.isEmpty())
-                return;
-        path = newPath;
-        vgi saving(path);
+        saveDialog();
     }
     if ((act->text()) == "Save to SVG"){
         for (int var = 0; var < info::vecItems.length(); ++var) {
             info::vecItems[var]->setSelected(0);
 
         }
-        QString path;
         QString newPath = QFileDialog::getSaveFileName(this, trUtf8("Save SVG"),
-            path, tr("SVG files (*.svg)"));
+            info::path, tr("SVG files (*.svg)"));
 
         if (newPath.isEmpty())
                 return;
-        path = newPath;
+        info::path = newPath;
         QSvgGenerator generator;
-            generator.setFileName(path);
+            generator.setFileName(info::path);
             generator.setSize(QSize(scene->width(), scene->height()));
             generator.setViewBox(QRect(0, 0, scene->width(), scene->height()));
         QPainter painter;
@@ -129,19 +181,112 @@ void MainWindow::clearScene(QAction *act)
 
     }
     if ((act->text()) == "Open from SVG"){
-        QString path;
         QString newPath = QFileDialog::getOpenFileName(this, trUtf8("Open SVG"),
-            path);
+            info::path);
         if (newPath.isEmpty())
                 return;
-        path = newPath;
+        info::path = newPath;
         svgreader reader(scene);
         scene->clear();
-        reader.getElements(path);
+        reader.getElements(info::path);
         scene->update();
     }
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event){
+    switch (event->key()) {
+    case Qt::Key_C:
+        if(event->modifiers() & Qt::CTRL){
+            QFile file(QCoreApplication::applicationDirPath()+"/temp");
+            file.open(QIODevice::WriteOnly);
+            QXmlStreamWriter xmlWriter(&file);
+            xmlWriter.setAutoFormatting(true);
+            xmlWriter.writeStartDocument();
+            xmlWriter.writeStartElement("VGI");
+            QClipboard *clipboard = QApplication::clipboard();
+            for (int var = 0; var < info::vecItems.length(); ++var) {
+                if(info::vecItems[var]->isSelected()){
+                    info::vecItems[var];
+
+                     xmlWriter.writeStartElement("g");
+                     xmlWriter.writeAttribute("pencolor",info::vecItems[var]->getPen().color().name());
+                     xmlWriter.writeAttribute("penwidth",QString::number(info::vecItems[var]->getPen().width()));
+                     xmlWriter.writeAttribute("brushcolor",info::vecItems[var]->getBrush().color().name());
+                     xmlWriter.writeAttribute("brushstyle",QString::number(info::vecItems[var]->getBrush().style()));
+                     xmlWriter.writeAttribute("angle",QString::number(info::vecItems[var]->getAngle()));
+
+                     info::vecItems[var]->getCords();
+                     xmlWriter.writeStartElement(info::vecItems[var]->getName());
+                     for (int i = 0; i < info::vecItems[var]->getCords().length(); ++i) {
+                         xmlWriter.writeStartElement("point");
+                         xmlWriter.writeAttribute("x",QString::number(info::vecItems[var]->getCords()[i].x()));
+                         xmlWriter.writeAttribute("y",QString::number(info::vecItems[var]->getCords()[i].y()));
+                         xmlWriter.writeEndElement();
+                     }
+                     xmlWriter.writeEndElement();
+                     xmlWriter.writeEndElement();
+                }
+            }
+            xmlWriter.writeEndElement();
+            file.flush();
+            file.close();
+            QDomDocument doc;
+            if (!file.open(QIODevice::ReadOnly) || !doc.setContent(&file))
+                return ;
+            clipboard->setText(doc.toString());
+            file.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
+            file.remove();
+            file.close();
+        }
+        break;
+    case Qt::Key_V:
+        if(event->modifiers() & Qt::CTRL){
+            QClipboard *clipboard = QApplication::clipboard();
+            QFile file(QCoreApplication::applicationDirPath()+"/temp");
+            file.open(QIODevice::WriteOnly);
+            file.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
+            QTextStream writeStream(&file);
+            writeStream << clipboard->text();
+            file.close();
+            loadFromvgi(QCoreApplication::applicationDirPath()+"/temp",scene,1);
+            break;
+        }
+    }
+}
+
+void MainWindow::saveAsDialog(){
+
+    for (int var = 0; var < info::vecItems.length(); ++var) {
+        info::vecItems[var]->setSelected(0);
+    }
+    QString newPath = QFileDialog::getSaveFileName(this, trUtf8("Save VGI"),
+        info::path, tr("VGI files (*.vgi)"));
+
+    if (newPath.isEmpty())
+            return;
+    info::path = newPath;
+    vgi saving(info::path);
+    this->setWindowTitle(info::path);
+}
+void MainWindow::saveDialog(){
+
+    if (info::path==""){
+        for (int var = 0; var < info::vecItems.length(); ++var) {
+            info::vecItems[var]->setSelected(0);
+        }
+        QString newPath = QFileDialog::getSaveFileName(this, trUtf8("Save VGI"),
+            info::path, tr("VGI files (*.vgi)"));
+
+        if (newPath.isEmpty())
+                return;
+        info::path = newPath;
+        vgi saving(info::path);
+    }
+    else{
+        vgi saving(info::path);
+    }
+
+}
 MainWindow::~MainWindow(){
     delete ui;
 }

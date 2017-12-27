@@ -5,7 +5,7 @@
 #include <QHBoxLayout>
 #include <QGraphicsView>
 #include <QMenuBar>
-
+#include <QKeyEvent>
 #include "lefttoolbar.h"
 #include "mainscene.h"
 
@@ -30,10 +30,16 @@ private:
     QGraphicsView *PaintZone;
     QMenuBar *mainMenuBar;
     QMenu *filemenu;
+    void keyPressEvent(QKeyEvent *event);
+    void closeEvent(QCloseEvent *event);
 public slots:
     void setMainScale();
     void clearScene(QAction *act);
     void setFixedSceneSize(int h,int w);
+    void saveAsDialog();
+    void saveDialog();
+    void exitWithSaving();
+    void exitWithoutSaving();
 };
 
 #endif // MAINWINDOW_H

@@ -139,16 +139,16 @@ int fRect::getAngle(){return angle;}
 bool fRect::leftA(QGraphicsSceneMouseEvent *event){
     bool res = 1;
     if (endPoint.x()-startPoint.x() > 0){
-        res = res*(event->scenePos().x()-pos().x()<=10/info::globalScale->getScaleX());
+        res = res  && (event->scenePos().x()-pos().x()<=10/info::globalScale->getScaleX());
     }
     if (endPoint.y()-startPoint.y() > 0){
-        res = res*(event->scenePos().y()-pos().y()<=10/info::globalScale->getScaleY());
+        res = res && (event->scenePos().y()-pos().y()<=10/info::globalScale->getScaleY());
     }
     if (endPoint.x()-startPoint.x() < 0){
-        res = res*(event->scenePos().x()-pos().x()>=-10/info::globalScale->getScaleX());
+        res = res && (event->scenePos().x()-pos().x()>=-10/info::globalScale->getScaleX());
     }
     if (endPoint.y()-startPoint.y() < 0){
-        res = res*(event->scenePos().y()-pos().y()>=-10/info::globalScale->getScaleY());
+        res = res && (event->scenePos().y()-pos().y()>=-10/info::globalScale->getScaleY());
     }
     return res;
 }

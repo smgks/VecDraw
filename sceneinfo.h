@@ -43,5 +43,8 @@ namespace info {
     extern QPen pen;
     extern QBrush brush;
     extern int angle;
+    extern QString path;
+    extern QVector<QAction*> undoGroup;
+    extern QVector<QAction*> redoGroup;
 }
 #endif // SCENEINFO_H

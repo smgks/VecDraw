@@ -8,7 +8,7 @@
 #include "figures/fpolyline.h"
 #include "figures/frect.h"
 
-loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene)
+loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene,bool sel)
 {
 
     QPen pen;
@@ -48,6 +48,10 @@ loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene)
              frect->addPoint(temp);
 
              scene->addItem(frect);
+             if (sel){
+                 frect->toGraphicsObject()->setFlag(frect->toGraphicsObject()->ItemIsSelectable,1);
+                 frect->toGraphicsObject()->setSelected(1);
+             }
              info::vecItems.append(frect);
          }
          QDomNode ellipse = dNode.at(i).firstChildElement("ellipse");
@@ -74,6 +78,10 @@ loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene)
              frect->addPoint(temp);
 
              scene->addItem(frect);
+             if (sel){
+                 frect->toGraphicsObject()->setFlag(frect->toGraphicsObject()->ItemIsSelectable,1);
+                 frect->toGraphicsObject()->setSelected(1);
+             }
              info::vecItems.append(frect);
          }
          QDomNode line = dNode.at(i).firstChildElement("line");
@@ -101,6 +109,10 @@ loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene)
              frect->addPoint(temp);
 
             scene->addItem(frect);
+            if (sel){
+                frect->toGraphicsObject()->setFlag(frect->toGraphicsObject()->ItemIsSelectable,1);
+                frect->toGraphicsObject()->setSelected(1);
+            }
              info::vecItems.append(frect);
          }
          QDomNode polyline = dNode.at(i).firstChildElement("polyline");
@@ -121,6 +133,10 @@ loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene)
                  frect->addPoint(temp);
              }
              scene->addItem(frect);
+             if (sel){
+                 frect->toGraphicsObject()->setFlag(frect->toGraphicsObject()->ItemIsSelectable,1);
+                 frect->toGraphicsObject()->setSelected(1);
+             }
              info::vecItems.append(frect);
          }
 

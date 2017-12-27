@@ -78,6 +78,7 @@ void tSelection::fromSelToBar(){
             for (int j = 0; j < strVec.length(); ++j){
                 if(!(strTempV.contains(strVec[j]))){
                     strVec.remove(j);
+                    tempV.remove(j);
                     delete paramVec[j];
                     paramVec.remove(j);
                     j--;
