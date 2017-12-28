@@ -28,6 +28,9 @@ void tRectangle::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void tRectangle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
+        info::URstActs.clearActs();
+        info::URstActs.addAct();
+
         rect = new fRect;
         rect->setAngle(info::angle);
         rect->setPen(info::pen);

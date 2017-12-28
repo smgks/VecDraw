@@ -31,6 +31,9 @@ void tPolyline::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void tPolyline::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
+        info::URstActs.clearActs();
+        info::URstActs.addAct();
+
         Polyline= new fPolyline;
         Polyline->setPen(info::pen);
         QPointF temppoint;

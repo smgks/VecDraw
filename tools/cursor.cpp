@@ -14,6 +14,8 @@ void tcursor::draw(QGraphicsScene *scene){
 void tcursor::mousePressEvent(QGraphicsSceneMouseEvent *event){
     if (event->buttons() == Qt::LeftButton){
         if (lScene){
+            info::URstActs.clearActs();
+            info::URstActs.addAct();
             QGraphicsItem *temp = Q_NULLPTR;
             temp = lScene->itemAt(event->scenePos(),QTransform());
             if (temp){
@@ -101,7 +103,7 @@ void tcursor::fromSelToBar(){
                 if(!(strTempV.contains(strVec[j]))){
                     strVec.remove(j);
                     delete paramVec[j];
-                    paramVec.remove(j);
+//                    paramVec.remove(j);
                     j--;
                 }
             }

@@ -3,10 +3,12 @@
 #include <QFile>
 #include <QDomNode>
 #include <iostream>
+
 #include "figures/fellipse.h"
 #include "figures/fline.h"
 #include "figures/fpolyline.h"
 #include "figures/frect.h"
+
 
 loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene,bool sel)
 {

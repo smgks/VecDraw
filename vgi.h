@@ -6,7 +6,7 @@
 class vgi : public QObject
 {
 public:
-    vgi(QString path);
+    vgi(QString path,int sel = 0);
 };
 
 #endif // VGI_H

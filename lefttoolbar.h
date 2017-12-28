@@ -18,6 +18,7 @@ class LeftToolBar : public QToolBar
     Q_OBJECT
 public:
     explicit LeftToolBar(TopToolBar *Bar);
+    void drop();
 signals:
     void changeScale();
 private:

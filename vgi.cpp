@@ -4,7 +4,7 @@
 
 #include "sceneinfo.h"
 
-vgi::vgi(QString path)
+vgi::vgi(QString path,int sel)
 {
     QFile file(path);
     file.open(QIODevice::WriteOnly);
@@ -16,8 +16,7 @@ vgi::vgi(QString path)
     xmlWriter.writeCharacters("vgi by Andrey Osadchiy");
     xmlWriter.writeEndElement();
     for (int var = 0; var < info::vecItems.length(); ++var) {
-        info::vecItems[var];
-
+        if (info::vecItems[var]->isSelected() == sel){
          xmlWriter.writeStartElement("g");
          xmlWriter.writeAttribute("pencolor",info::vecItems[var]->getPen().color().name());
          xmlWriter.writeAttribute("penwidth",QString::number(info::vecItems[var]->getPen().width()));
@@ -33,6 +32,7 @@ vgi::vgi(QString path)
              xmlWriter.writeAttribute("y",QString::number(info::vecItems[var]->getCords()[i].y()));
              xmlWriter.writeEndElement();
          }
+        }
          xmlWriter.writeEndElement();
          xmlWriter.writeEndElement();
     }

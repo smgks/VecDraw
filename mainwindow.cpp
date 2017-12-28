@@ -17,10 +17,11 @@
 #include "svgreader.h"
 #include "vgi.h"
 #include "loadfromvgi.h"
+
 info::gScale *(info::globalScale) = new info::gScale;
 QString info::path = "";
-QVector<QAction*> undoGroup;
-QVector<QAction*> redoGroup;
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -58,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
     filemenu->addAction("Save to vgi");
     filemenu->addAction("Open from vgi");
     this->setWindowTitle(QString("Unnamed") + QString(" - not saved"));
+    info::URstActs.setScene(scene);
     connect(LeftlBar,SIGNAL(changeScale()),this,SLOT(setMainScale()));
 
     connect(filemenu,SIGNAL(triggered(QAction*)),this,SLOT(clearScene(QAction*)));
@@ -84,6 +86,7 @@ void MainWindow::closeEvent(QCloseEvent *event){
     Hlay->addWidget(ignoreBtn);
     connect(noBtn,SIGNAL(clicked(bool)),this,SLOT(exitWithoutSaving()));
     ignoreBtn->setText("back");
+    connect(ignoreBtn,SIGNAL(clicked(bool)),dialog,SLOT(close()));
     Hlay->addWidget(yesBtn);
     yesBtn->setText("Yes");
     connect(yesBtn,SIGNAL(clicked(bool)),this,SLOT(exitWithSaving()));
@@ -197,42 +200,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
     switch (event->key()) {
     case Qt::Key_C:
         if(event->modifiers() & Qt::CTRL){
-            QFile file(QCoreApplication::applicationDirPath()+"/temp");
-            file.open(QIODevice::WriteOnly);
-            QXmlStreamWriter xmlWriter(&file);
-            xmlWriter.setAutoFormatting(true);
-            xmlWriter.writeStartDocument();
-            xmlWriter.writeStartElement("VGI");
+            QString path = QCoreApplication::applicationDirPath()+"/temp";
+            vgi temp(path,1);
+            QFile file(path);
             QClipboard *clipboard = QApplication::clipboard();
-            for (int var = 0; var < info::vecItems.length(); ++var) {
-                if(info::vecItems[var]->isSelected()){
-                    info::vecItems[var];
 
-                     xmlWriter.writeStartElement("g");
-                     xmlWriter.writeAttribute("pencolor",info::vecItems[var]->getPen().color().name());
-                     xmlWriter.writeAttribute("penwidth",QString::number(info::vecItems[var]->getPen().width()));
-                     xmlWriter.writeAttribute("brushcolor",info::vecItems[var]->getBrush().color().name());
-                     xmlWriter.writeAttribute("brushstyle",QString::number(info::vecItems[var]->getBrush().style()));
-                     xmlWriter.writeAttribute("angle",QString::number(info::vecItems[var]->getAngle()));
-
-                     info::vecItems[var]->getCords();
-                     xmlWriter.writeStartElement(info::vecItems[var]->getName());
-                     for (int i = 0; i < info::vecItems[var]->getCords().length(); ++i) {
-                         xmlWriter.writeStartElement("point");
-                         xmlWriter.writeAttribute("x",QString::number(info::vecItems[var]->getCords()[i].x()));
-                         xmlWriter.writeAttribute("y",QString::number(info::vecItems[var]->getCords()[i].y()));
-                         xmlWriter.writeEndElement();
-                     }
-                     xmlWriter.writeEndElement();
-                     xmlWriter.writeEndElement();
-                }
-            }
-            xmlWriter.writeEndElement();
-            file.flush();
-            file.close();
             QDomDocument doc;
             if (!file.open(QIODevice::ReadOnly) || !doc.setContent(&file))
                 return ;
+            clipboard->clear();
             clipboard->setText(doc.toString());
             file.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
             file.remove();
@@ -248,9 +224,27 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             QTextStream writeStream(&file);
             writeStream << clipboard->text();
             file.close();
+
+
+
             loadFromvgi(QCoreApplication::applicationDirPath()+"/temp",scene,1);
+            file.open(QIODevice::ReadOnly);
+            file.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
+            file.remove();
+            file.close();
             break;
         }
+    case Qt::Key_Z:
+        if ((event->modifiers() & Qt::CTRL) && (event->modifiers() & Qt::SHIFT)){
+            info::URstActs.redoAct();
+            LeftlBar->drop();
+            break;
+        }
+        if(event->modifiers() & Qt::CTRL){
+            info::URstActs.undoAct();
+            LeftlBar->drop();
+        }
+        break;
     }
 }
 

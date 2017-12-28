@@ -9,7 +9,7 @@ QVector<abstractfigure*> info::vecItems;
 QPen info::pen;
 QBrush info::brush;
 int info::angle;
-
+info::URst info::URstActs;
 MainScene::MainScene(QObject *parent) :
     QGraphicsScene(parent)
 {

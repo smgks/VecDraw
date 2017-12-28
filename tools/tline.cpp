@@ -27,6 +27,9 @@ void tLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void tLine::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
+        info::URstActs.clearActs();
+        info::URstActs.addAct();
+
         line = new fLine;
         line->setPen(info::pen);
         QPointF temppoint;

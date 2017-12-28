@@ -74,11 +74,11 @@ void tSelection::fromSelToBar(){
             for (int j = tempV.length()-1; j >= 0; --j){
                 strTempV.append(tempV[j]->accessibleName());
                 delete tempV[j];
+                tempV.remove(j);
             }
             for (int j = 0; j < strVec.length(); ++j){
                 if(!(strTempV.contains(strVec[j]))){
                     strVec.remove(j);
-                    tempV.remove(j);
                     delete paramVec[j];
                     paramVec.remove(j);
                     j--;
@@ -109,6 +109,9 @@ void tSelection::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (event->buttons() == Qt::LeftButton){
         *lpos = event->scenePos();
         if(lScene){
+            info::URstActs.clearActs();
+            info::URstActs.addAct();
+
             QGraphicsItem *temp = Q_NULLPTR;
             temp = lScene->itemAt(*lpos,QTransform());
             for (int i = 0; i < items.length(); ++i) {

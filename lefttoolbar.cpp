@@ -46,6 +46,11 @@ LeftToolBar::LeftToolBar(TopToolBar *Bar)
 
     emit Polyline->click();
 }
+
+void LeftToolBar::drop(){
+    emit Polyline->click();
+}
+
 void LeftToolBar::setScaleBox(){
     scalebox->setValue(info::globalScale->getScaleX());
 }
