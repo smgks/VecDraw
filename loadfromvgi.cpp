@@ -48,7 +48,9 @@ loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene,bool sel)
              temp = QPointF(nodes.item(1).toElement().attribute("x").toFloat(),
                             nodes.item(1).toElement().attribute("y").toFloat());
              frect->addPoint(temp);
-
+             frect->setZValue(dNode.at(i).toElement().attribute("z").toInt());
+             frect->setPos(dNode.at(i).toElement().firstChildElement("pos").attribute("x").toFloat(),
+                           dNode.at(i).toElement().firstChildElement("pos").attribute("y").toFloat());
              scene->addItem(frect);
              if (sel){
                  frect->toGraphicsObject()->setFlag(frect->toGraphicsObject()->ItemIsSelectable,1);
@@ -78,7 +80,9 @@ loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene,bool sel)
              temp = QPointF(nodes.item(1).toElement().attribute("x").toFloat(),
                             nodes.item(1).toElement().attribute("y").toFloat());
              frect->addPoint(temp);
-
+             frect->setZValue(dNode.at(i).toElement().attribute("z").toInt());
+             frect->setPos(dNode.at(i).toElement().firstChildElement("pos").attribute("x").toFloat(),
+                           dNode.at(i).toElement().firstChildElement("pos").attribute("y").toFloat());
              scene->addItem(frect);
              if (sel){
                  frect->toGraphicsObject()->setFlag(frect->toGraphicsObject()->ItemIsSelectable,1);
@@ -103,13 +107,14 @@ loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene,bool sel)
                           nodes.item(0).toElement().attribute("y").toFloat());
             std::cout<<nodes.item(0).toElement().attribute("x").toFloat()<<" <> "<<nodes.item(0).toElement().attribute("y").toFloat()<<std::endl;
              frect->addPoint(temp);
-
+             frect->setZValue(dNode.at(i).toElement().attribute("z").toInt());
              frect->setPos(nodes.item(0).toElement().attribute("x").toFloat(),
                           nodes.item(0).toElement().attribute("y").toFloat());
              temp = QPointF(nodes.item(1).toElement().attribute("x").toFloat(),
                             nodes.item(1).toElement().attribute("y").toFloat());
              frect->addPoint(temp);
-
+             frect->setPos(dNode.at(i).toElement().firstChildElement("pos").attribute("x").toFloat(),
+                           dNode.at(i).toElement().firstChildElement("pos").attribute("y").toFloat());
             scene->addItem(frect);
             if (sel){
                 frect->toGraphicsObject()->setFlag(frect->toGraphicsObject()->ItemIsSelectable,1);
@@ -127,6 +132,7 @@ loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene,bool sel)
              QPointF temp(nodes.item(0).toElement().attribute("x").toFloat(),
                           nodes.item(0).toElement().attribute("y").toFloat());
              frect->addPoint(temp);
+             frect->setZValue(dNode.at(i).toElement().attribute("z").toInt());
              frect->setPos(nodes.item(0).toElement().attribute("x").toFloat(),
                            nodes.item(0).toElement().attribute("y").toFloat());
              for (int var = 1; var < nodes.length(); ++var) {
@@ -134,6 +140,8 @@ loadFromvgi::loadFromvgi(QString filename, QGraphicsScene *scene,bool sel)
                                 nodes.item(var).toElement().attribute("y").toFloat());
                  frect->addPoint(temp);
              }
+             frect->setPos(dNode.at(i).toElement().firstChildElement("pos").attribute("x").toFloat(),
+                           dNode.at(i).toElement().firstChildElement("pos").attribute("y").toFloat());
              scene->addItem(frect);
              if (sel){
                  frect->toGraphicsObject()->setFlag(frect->toGraphicsObject()->ItemIsSelectable,1);

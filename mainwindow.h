@@ -32,6 +32,12 @@ private:
     QMenu *filemenu;
     void keyPressEvent(QKeyEvent *event);
     void closeEvent(QCloseEvent *event);
+    void mousePressEvent(QMouseEvent *event){
+//        checkSaving();
+    }
+    void checkSaving();
+private slots:
+    void notSaved();
 public slots:
     void setMainScale();
     void clearScene(QAction *act);

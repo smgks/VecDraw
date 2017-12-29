@@ -12,6 +12,7 @@ public:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     virtual void setbar(TopToolBar *bar);
+    void setFigureNull(){fromSelToBar();}
 private:
     QGraphicsScene *lScene;
 

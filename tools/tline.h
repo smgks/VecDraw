@@ -12,6 +12,7 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void setbar(TopToolBar *bar);
+    void setFigureNull(){line=NULL;}
 private:
     fLine *line;
 

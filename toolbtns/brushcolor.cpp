@@ -18,11 +18,15 @@ void brushColor::click(){
     if (!temp.isValid() ) {
     }
     info::brush.setColor(temp);
+
     for (int var = 0; var < info::vecItems.length(); ++var) {
         if (info::vecItems[var]->isSelected()){
             info::vecItems[var]->setBrush(info::brush);
+            info::vecItems[var]->update();
         }
     }
+    info::URstActs.clearReActs();
+    info::URstActs.addAct();
     button->setStyleSheet("background-color: " + info::brush.color().name());
 }
 brushColor::~brushColor()

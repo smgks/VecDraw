@@ -63,35 +63,46 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(LeftlBar,SIGNAL(changeScale()),this,SLOT(setMainScale()));
 
     connect(filemenu,SIGNAL(triggered(QAction*)),this,SLOT(clearScene(QAction*)));
+    connect(scene,SIGNAL(mClick()),this,SLOT(notSaved()));
 }
 
 void MainWindow::closeEvent(QCloseEvent *event){
+    if(!isEnabled()){
+        event->ignore();
+        return;
+    }
+    if (!info::URstActs.isSaved()){
+        QWidget *dialog = new QWidget;
+        QVBoxLayout *Vlay = new QVBoxLayout;
+        QHBoxLayout *Hlay = new QHBoxLayout;
+        QLabel *lb = new QLabel;
+        QPushButton *yesBtn = new QPushButton;
+        QPushButton *noBtn = new QPushButton;
+        QPushButton *ignoreBtn = new QPushButton;
 
-    QWidget *dialog = new QWidget;
-    QVBoxLayout *Vlay = new QVBoxLayout;
-    QHBoxLayout *Hlay = new QHBoxLayout;
-    QLabel *lb = new QLabel;
-    QPushButton *yesBtn = new QPushButton;
-    QPushButton *noBtn = new QPushButton;
-    QPushButton *ignoreBtn = new QPushButton;
-
-    dialog->setLayout(Vlay);
-    dialog->setFixedSize(240,80);
-    Vlay->addWidget(lb);
-    lb->setText("you want to save it?");
-    lb->setAlignment(Qt::AlignCenter);
-    Vlay->addLayout(Hlay);
-    Hlay->addWidget(noBtn);
-    noBtn->setText("No");
-    Hlay->addWidget(ignoreBtn);
-    connect(noBtn,SIGNAL(clicked(bool)),this,SLOT(exitWithoutSaving()));
-    ignoreBtn->setText("back");
-    connect(ignoreBtn,SIGNAL(clicked(bool)),dialog,SLOT(close()));
-    Hlay->addWidget(yesBtn);
-    yesBtn->setText("Yes");
-    connect(yesBtn,SIGNAL(clicked(bool)),this,SLOT(exitWithSaving()));
-    dialog->show();
-    event->ignore();
+        dialog->setLayout(Vlay);
+        dialog->setFixedSize(240,80);
+        Vlay->addWidget(lb);
+        lb->setText("you want to save it?");
+        lb->setAlignment(Qt::AlignCenter);
+        Vlay->addLayout(Hlay);
+        Hlay->addWidget(noBtn);
+        noBtn->setText("No");
+        Hlay->addWidget(ignoreBtn);
+        setEnabled(0);
+        connect(noBtn,SIGNAL(clicked(bool)),this,SLOT(exitWithoutSaving()));
+        ignoreBtn->setText("back");
+        connect(ignoreBtn,SIGNAL(clicked(bool)),dialog,SLOT(close()));
+        connect(ignoreBtn,SIGNAL(clicked(bool)),this,SLOT(setDisabled(bool)));
+        Hlay->addWidget(yesBtn);
+        yesBtn->setText("Yes");
+        connect(yesBtn,SIGNAL(clicked(bool)),this,SLOT(exitWithSaving()));
+        dialog->show();
+        dialog->setFocus();
+        dialog->raise();
+        dialog->activateWindow();
+        event->ignore();
+    }
 }
 
 void MainWindow::exitWithSaving(){
@@ -225,27 +236,59 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             writeStream << clipboard->text();
             file.close();
 
-
-
             loadFromvgi(QCoreApplication::applicationDirPath()+"/temp",scene,1);
             file.open(QIODevice::ReadOnly);
             file.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
             file.remove();
             file.close();
+            checkSaving();
             break;
         }
     case Qt::Key_Z:
         if ((event->modifiers() & Qt::CTRL) && (event->modifiers() & Qt::SHIFT)){
+            std::cout << "ctr + shift + z\n";
+            for (int i = 0; i < info::vecItems.length(); ++i) {
+                info::vecItems[i]->setFlag(info::vecItems[i]->ItemIsSelectable,1);
+                info::vecItems[i]->setSelected(0);
+            }
             info::URstActs.redoAct();
-            LeftlBar->drop();
+            checkSaving();
+            info::tool->setFigureNull();
             break;
         }
         if(event->modifiers() & Qt::CTRL){
+            std::cout << "ctr + z\n";
+            for (int i = 0; i < info::vecItems.length(); ++i) {
+                info::vecItems[i]->setFlag(info::vecItems[i]->ItemIsSelectable,1);
+                info::vecItems[i]->setSelected(0);
+            }
             info::URstActs.undoAct();
-            LeftlBar->drop();
+            checkSaving();
+            info::tool->setFigureNull();
+        }
+        break;
+    case Qt::Key_S:
+        if(event->modifiers() & Qt::CTRL){
+            saveDialog();
         }
         break;
     }
+}
+
+void MainWindow::checkSaving(){
+    if (info::URstActs.isSaved()){
+        setWindowTitle(info::path);
+    }else{
+        if (info::path==""){
+            setWindowTitle("unnamed - not saved");
+        }else{
+            setWindowTitle(info::path + " - not saved");
+        }
+    }
+}
+
+void MainWindow::notSaved(){
+    checkSaving();
 }
 
 void MainWindow::saveAsDialog(){
@@ -259,25 +302,19 @@ void MainWindow::saveAsDialog(){
     if (newPath.isEmpty())
             return;
     info::path = newPath;
-    vgi saving(info::path);
+    vgi saving(info::path,0);
     this->setWindowTitle(info::path);
 }
 void MainWindow::saveDialog(){
 
     if (info::path==""){
-        for (int var = 0; var < info::vecItems.length(); ++var) {
-            info::vecItems[var]->setSelected(0);
-        }
-        QString newPath = QFileDialog::getSaveFileName(this, trUtf8("Save VGI"),
-            info::path, tr("VGI files (*.vgi)"));
-
-        if (newPath.isEmpty())
-                return;
-        info::path = newPath;
-        vgi saving(info::path);
+        info::URstActs.addAct();
+        saveAsDialog();
     }
     else{
-        vgi saving(info::path);
+        info::URstActs.addAct();
+        vgi saving(info::path,0);
+        this->setWindowTitle(info::path);
     }
 
 }

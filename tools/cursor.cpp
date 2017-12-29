@@ -13,9 +13,9 @@ void tcursor::draw(QGraphicsScene *scene){
 }
 void tcursor::mousePressEvent(QGraphicsSceneMouseEvent *event){
     if (event->buttons() == Qt::LeftButton){
+//        info::URstActs.clearReActs();
+//        info::URstActs.addAct();
         if (lScene){
-            info::URstActs.clearActs();
-            info::URstActs.addAct();
             QGraphicsItem *temp = Q_NULLPTR;
             temp = lScene->itemAt(event->scenePos(),QTransform());
             if (temp){
@@ -63,9 +63,10 @@ void tcursor::setbar(TopToolBar *bar){
 
 void tcursor::delitems()
 {
-    for (int i = 0; i < lScene->items().length(); ++i) {
-        if(lScene->items()[i]->isSelected()){
-            lScene->removeItem(lScene->items()[i]);
+    for (int i = 0; i < info::vecItems.length(); ++i) {
+        if(info::vecItems[i]->isSelected()){
+            lScene->removeItem(info::vecItems[i]);
+            info::vecItems.remove(i);
             i--;
         }
     }
@@ -103,7 +104,7 @@ void tcursor::fromSelToBar(){
                 if(!(strTempV.contains(strVec[j]))){
                     strVec.remove(j);
                     delete paramVec[j];
-//                    paramVec.remove(j);
+                    paramVec.remove(j);
                     j--;
                 }
             }

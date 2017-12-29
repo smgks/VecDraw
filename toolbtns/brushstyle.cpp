@@ -9,6 +9,7 @@ brushStyle::brushStyle()
     lay->addWidget(label);
     label->setText("brush style");
     lay->addWidget(combobox);
+    combobox->setFocusPolicy(Qt::NoFocus);
     combobox->addItem("NoBrush");
     combobox->addItem("SolidPattern");
     combobox->addItem("Dense1Pattern");
@@ -35,11 +36,16 @@ brushStyle::brushStyle()
 
 void brushStyle::vChg(){
     info::brush.setStyle(Qt::BrushStyle(combobox->currentIndex()));
+
     for (int var = 0; var < info::vecItems.length(); ++var) {
         if (info::vecItems[var]->isSelected()){
             info::vecItems[var]->setBrush(info::brush);
+            info::vecItems[var]->update();
         }
     }
+    info::URstActs.clearReActs();
+    info::URstActs.addAct();
+    combobox->setFocusPolicy(Qt::NoFocus);
 }
 
 brushStyle::~brushStyle()

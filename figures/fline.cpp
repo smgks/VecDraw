@@ -4,8 +4,7 @@ fLine::fLine() : abstractfigure()
 {
 
     newF = 1;
-//    penC = new penColor;
-//    penR = new penRadius;
+
 }
 
 QRectF fLine::boundingRect() const

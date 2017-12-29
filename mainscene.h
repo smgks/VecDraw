@@ -24,7 +24,7 @@ public:
     void ReDraw();
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 signals:
-
+    void mClick();
 public slots:
 };
 

@@ -4,7 +4,6 @@
 #include <QTransform>
 #include <QGraphicsItem>
 #include <QGraphicsEffect>
-#include <iostream>
 #include "sceneinfo.h"
 #include "figures/abstractfigure.h"
 
@@ -23,6 +22,7 @@ void tSelection::draw(QGraphicsScene *scene)
 void tSelection::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
+
         if(lScene){
             for (int i = 0; i < items.length(); ++i) {
                 items[i]->setFlag(items[i]->ItemIsSelectable,1);
@@ -108,15 +108,14 @@ void tSelection::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
         *lpos = event->scenePos();
-        if(lScene){
-            info::URstActs.clearActs();
-            info::URstActs.addAct();
-
+        info::URstActs.clearReActs();
+        info::URstActs.addAct();
+        if(lScene){           
             QGraphicsItem *temp = Q_NULLPTR;
             temp = lScene->itemAt(*lpos,QTransform());
-            for (int i = 0; i < items.length(); ++i) {
-                items[i]->setFlag(items[i]->ItemIsSelectable,0);
-                items[i]->setSelected(0);
+            for (int i = 0; i < info::vecItems.length(); ++i) {
+                info::vecItems[i]->setFlag(info::vecItems[i]->ItemIsSelectable,1);
+                info::vecItems[i]->setSelected(0);
             }
             items.clear();
             if (temp){
@@ -154,9 +153,9 @@ void tSelection::setbar(TopToolBar *bar)
 
 void tSelection::delitems()
 {
-    for (int i = 0; i < lScene->items().length(); ++i) {
-        if(lScene->items()[i]->isSelected()){
-            lScene->removeItem(lScene->items()[i]);
+    for (int i = 0; i < info::vecItems.length(); ++i) {
+        if(info::vecItems[i]->isSelected()){
+            lScene->removeItem(info::vecItems[i]);
             info::vecItems.remove(i);
             i--;
         }

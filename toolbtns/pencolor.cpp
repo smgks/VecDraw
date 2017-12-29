@@ -18,11 +18,15 @@ void penColor::click(){
     if (!temp.isValid() ) {
     }
     info::pen.setColor(temp);
+
     for (int var = 0; var < info::vecItems.length(); ++var) {
         if (info::vecItems[var]->isSelected()){
             info::vecItems[var]->setPen(info::pen);
+            info::vecItems[var]->update();
         }
     }
+    info::URstActs.clearReActs();
+    info::URstActs.addAct();
     button->setStyleSheet("background-color: " + info::pen.color().name());
 }
 

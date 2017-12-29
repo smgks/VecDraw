@@ -2,13 +2,7 @@
 
 fEllipse::fEllipse() : abstractfigure()
 {
-//    penC = new penColor;
 
-//    penR = new penRadius;
-
-//    brushC = new brushColor;
-
-//    brushS = new brushStyle;
 
     newF = 1;
 }

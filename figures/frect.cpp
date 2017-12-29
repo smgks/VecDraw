@@ -8,11 +8,7 @@ fRect::fRect() : abstractfigure()
     angle = 1;
     setAcceptHoverEvents(1);
     newF = 1;
-//    penC = new penColor;
-//    penR = new penRadius;
-//    brushC = new brushColor;
-//    brushS = new brushStyle;
-//    angOfRect = new rectA;
+
 }
 
 QRectF fRect::boundingRect() const

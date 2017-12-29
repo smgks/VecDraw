@@ -6,8 +6,7 @@ fPolyline::fPolyline() : abstractfigure()
     minY = 0;
     maxX = 0;
     maxY = 0;
-//    penC = new penColor;
-//    penR = new penRadius;
+
 
 }
 

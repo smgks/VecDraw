@@ -20,8 +20,10 @@ void MainScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     info::tool->draw(this);
     info::tool->mouseMoveEvent(event);
-    update();
+
     QGraphicsScene::mouseMoveEvent(event);
+    update();
+    emit mClick();
 }
 void MainScene::ReDraw(){
 
@@ -29,15 +31,18 @@ void MainScene::ReDraw(){
 
 void MainScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-
 }
 
 void MainScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     info::tool->draw(this);
     info::tool->mousePressEvent(event);
-    update();
+
     if (info::tool->text() != "magnifier"){
         QGraphicsScene::mousePressEvent(event);
     }
+    update();
+    info::URstActs.addAct();
+    info::URstActs.clearReActs();    
+    emit mClick();
 }

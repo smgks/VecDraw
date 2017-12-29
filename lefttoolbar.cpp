@@ -25,6 +25,7 @@ LeftToolBar::LeftToolBar(TopToolBar *Bar)
     setMovable(1);
     setMinimumSize(50,50);
     addWidget(scalebox);
+    scalebox->setMinimumSize(20,40);
     addWidget(Polyline);
     addWidget(Rectangle);
     addWidget(Ellipse);
@@ -48,7 +49,11 @@ LeftToolBar::LeftToolBar(TopToolBar *Bar)
 }
 
 void LeftToolBar::drop(){
-    emit Polyline->click();
+    abstractTool *temp = info::tool;
+    TopBar->clear();
+    TopBar->show();
+    info::tool = new tPolyline;
+    info::tool = temp;
 }
 
 void LeftToolBar::setScaleBox(){
@@ -129,5 +134,8 @@ void LeftToolBar::dropStyle(){
 
 void LeftToolBar::scaleChanged(){
     info::globalScale->setScale(qreal(scalebox->value()),qreal(scalebox->value()));
+    scalebox->setEnabled(0);
+    scalebox->setEnabled(1);
+    scalebox->setFocusPolicy(Qt::NoFocus);
     emit changeScale();
 }

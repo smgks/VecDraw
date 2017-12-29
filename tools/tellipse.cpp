@@ -27,8 +27,8 @@ void tEllipse::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void tEllipse::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->buttons() == Qt::LeftButton){
-        info::URstActs.clearActs();
-        info::URstActs.addAct();
+//        info::URstActs.clearReActs();
+//        info::URstActs.addAct();
 
         ellipse = new fEllipse;
         ellipse->setPen(info::pen);

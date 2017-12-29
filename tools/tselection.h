@@ -12,6 +12,7 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void setbar(TopToolBar *bar);
+    void setFigureNull(){fromSelToBar();}
 private:
     QPointF *lpos;
     QRectF *rect;

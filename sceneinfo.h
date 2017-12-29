@@ -5,12 +5,12 @@
 #include "figures/abstractfigure.h"
 #include "vgi.h"
 #include "loadfromvgi.h"
-#include <iostream>
 #include <QXmlStreamWriter>
 #include <QDomDocument>
 #include <QObject>
 #include <QtCore>
 
+#include <iostream>
 
 
 namespace info {
@@ -51,6 +51,7 @@ namespace info {
     extern int angle;
     extern QString path;
 
+    
     class URst{
     private:
         QGraphicsScene *scene;
@@ -67,20 +68,18 @@ namespace info {
                 undoGroup.pop_front();
             }
 
-            QString path = QCoreApplication::applicationDirPath() +"/temp";
-            vgi temp(path,0);
-            QFile file(path);
+            QString tpath = QCoreApplication::applicationDirPath() + "/temp";
+            vgi temp(tpath);
+            QFile file(tpath);
             QDomDocument doc;
             if (!file.open(QIODevice::ReadOnly) || !doc.setContent(&file))
                 return ;
             if (undoGroup.length()!=0){
                 if (undoGroup.last() != doc.toString()){
                     undoGroup.append(doc.toString());
-                    std::cout<<doc.toString().toStdString();
                 }
             }else{
                 undoGroup.append(doc.toString());
-    //            std::cout<<doc.toString().toStdString();
             }
             file.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
             file.remove();
@@ -111,7 +110,7 @@ namespace info {
             file.close();
         }
         void redoAct(){
-            addAct();
+
             if (redoGroup.length() != 0){
                 undoGroup.append(redoGroup.last());
                 redoGroup.removeLast();
@@ -135,7 +134,26 @@ namespace info {
             file.close();
 
         }
-        void clearActs(){
+        bool isSaved(){
+
+            QFile file(path);
+            QDomDocument doc;
+            if (!file.open(QIODevice::ReadOnly) || !doc.setContent(&file))
+            {
+                file.close();
+                return 0;
+            }
+            QString tempStr = doc.toString();
+            file.close();
+            bool res =0;
+            if (undoGroup.length()!=0){
+            res = QString::localeAwareCompare(tempStr,undoGroup.last());
+            }
+            std::cout << res <<std::endl;
+            return !res;
+
+        }
+        void clearReActs(){
             redoGroup.clear();
         }
     };
